@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Vice Language — Official Documentation</title>
+
+<style>
+:root{
+    --bg:#0b0f0d;
+    --panel:#101512;
+    --panel2:#151c18;
+    --border:#243127;
+    --text:#d7e4d9;
+    --muted:#8ea08f;
+    --green:#7ee787;
+    --green2:#56d364;
+    --blue:#79c0ff;
+    --yellow:#e3b341;
+    --red:#ff7b72;
+    --purple:#d2a8ff;
+    --shadow:0 0 0 1px rgba(255,255,255,.03),0 10px 40px rgba(0,0,0,.5);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:
+    radial-gradient(circle at top left,rgba(126,231,135,.05),transparent 20%),
+    radial-gradient(circle at bottom right,rgba(121,192,255,.05),transparent 20%),
+    var(--bg);
+
+    color:var(--text);
+    font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    monospace;
+
+    line-height:1.7;
+}
+
+.layout{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:290px;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    overflow:auto;
+
+    background:rgba(10,14,11,.92);
+    backdrop-filter:blur(10px);
+
+    border-right:1px solid var(--border);
+
+    padding:24px;
+    z-index:50;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:24px;
+}
+
+.logo-box{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--green2),#2ea043);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#04110a;
+    font-weight:900;
+    font-size:1.2rem;
+    box-shadow:0 0 20px rgba(126,231,135,.2);
+}
+
+.logo h1{
+    font-size:1.15rem;
+}
+
+.logo span{
+    color:var(--muted);
+    font-size:.85rem;
+}
+
+.lang-switch{
+    display:flex;
+    gap:10px;
+    margin-bottom:24px;
+}
+
+.lang-switch button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:12px;
+    background:var(--panel2);
+    color:var(--text);
+    cursor:pointer;
+    transition:.2s;
+    border:1px solid transparent;
+}
+
+.lang-switch button:hover{
+    border-color:var(--green2);
+}
+
+.lang-switch button.active{
+    background:#1f2a22;
+    border-color:var(--green2);
+    color:var(--green);
+}
+
+.nav-title{
+    color:var(--muted);
+    margin-bottom:10px;
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:2px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:8px;
+}
+
+.sidebar a{
+    display:block;
+    color:var(--text);
+    text-decoration:none;
+    padding:10px 14px;
+    border-radius:10px;
+    transition:.2s;
+    border:1px solid transparent;
+}
+
+.sidebar a:hover{
+    background:#121915;
+    border-color:#203024;
+    transform:translateX(4px);
+}
+
+.content{
+    margin-left:290px;
+    width:calc(100% - 290px);
+    padding:34px;
+}
+
+.hero{
+    background:
+    linear-gradient(180deg,rgba(126,231,135,.05),transparent),
+    var(--panel);
+
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:50px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:32px;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.015),
+        rgba(255,255,255,.015) 1px,
+        transparent 1px,
+        transparent 4px
+    );
+    pointer-events:none;
+}
+
+.terminal-bar{
+    display:flex;
+    gap:8px;
+    margin-bottom:24px;
+}
+
+.dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+}
+
+.dot.red{ background:var(--red); }
+.dot.yellow{ background:var(--yellow); }
+.dot.green{ background:var(--green2); }
+
+.hero h1{
+    font-size:3rem;
+    margin-bottom:16px;
+    color:var(--green);
+}
+
+.hero p{
+    max-width:850px;
+    color:var(--muted);
+    font-size:1.05rem;
+}
+
+.badges{
+    margin-top:28px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.badge{
+    background:#111814;
+    border:1px solid #203024;
+    color:var(--green);
+    padding:10px 14px;
+    border-radius:999px;
+    font-size:.85rem;
+}
+
+.section{
+    margin-bottom:26px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.section-header{
+    padding:18px 24px;
+    border-bottom:1px solid var(--border);
+    background:#0f1411;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.section-header h2{
+    font-size:1.3rem;
+    color:var(--green);
+}
+
+.section-content{
+    padding:28px;
+}
+
+.section p{
+    color:#bfd1c1;
+    margin-bottom:16px;
+}
+
+.notice{
+    background:#111814;
+    border:1px solid #223326;
+    border-left:4px solid var(--green2);
+    padding:16px;
+    border-radius:14px;
+    color:#cfe7d2;
+    margin:20px 0;
+}
+
+pre{
+    background:#0b100d;
+    border:1px solid #1d2a20;
+    border-radius:18px;
+    overflow:auto;
+    margin:22px 0;
+    position:relative;
+}
+
+.code-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:12px 16px;
+    border-bottom:1px solid #18241c;
+    background:#0f1511;
+}
+
+.code-lang{
+    color:var(--muted);
+    font-size:.8rem;
+}
+
+.copy-btn{
+    border:none;
+    background:#152019;
+    color:var(--green);
+    padding:7px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:.8rem;
+    transition:.2s;
+}
+
+.copy-btn:hover{
+    background:#1d2b21;
+}
+
+code{
+    display:block;
+    padding:22px;
+    font-size:.92rem;
+    line-height:1.8;
+    color:#d8e5da;
+    font-family:inherit;
+}
+
+.kw{ color:var(--purple); }
+.type{ color:var(--blue); }
+.string{ color:var(--green); }
+.number{ color:var(--yellow); }
+.func{ color:#ffa657; }
+.attr{ color:#ff7b72; }
+.comment{ color:#6b7d6e; font-style:italic; }
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,td{
+    padding:14px;
+    border:1px solid #1f2b22;
+    text-align:left;
+}
+
+th{
+    background:#0f1511;
+    color:var(--green);
+}
+
+tr:nth-child(even){
+    background:rgba(255,255,255,.015);
+}
+
+.footer{
+    padding:40px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.watermark{
+    position:fixed;
+    right:18px;
+    bottom:14px;
+    opacity:.08;
+    pointer-events:none;
+    font-size:1rem;
+    font-weight:700;
+}
+
+.mobile-toggle{
+    display:none;
+}
+
+@media(max-width:980px){
+
+    .mobile-toggle{
+        display:block;
+        position:fixed;
+        top:14px;
+        left:14px;
+        z-index:100;
+
+        border:none;
+        background:#111814;
+        color:var(--green);
+
+        border:1px solid #223326;
+
+        padding:12px 14px;
+        border-radius:12px;
+        cursor:pointer;
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .content{
+        margin-left:0;
+        width:100%;
+        padding:18px;
+        padding-top:70px;
+    }
+
+    .hero{
+        padding:34px;
+    }
+
+    .hero h1{
+        font-size:2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="watermark">
+© Vice Language Project — All rights reserved
+</div>
+
+<button class="mobile-toggle" id="mobileToggle">
+☰
+</button>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+
+<div class="logo">
+<div class="logo-box">V</div>
+
+<div>
+<h1>Vice Language</h1>
+<span id="subtitle">Official Documentation</span>
+</div>
+</div>
+
+<div class="lang-switch">
+<button id="lang-en" class="active">EN</button>
+<button id="lang-zh">中文</button>
+</div>
+
+<div class="nav-title" id="contents-title">Contents</div>
+
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#install">Installation</a></li>
+<li><a href="#basics">Basics</a></li>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#conditions">Conditions</a></li>
+<li><a href="#loops">Loops</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#data">Data Structures</a></li>
+<li><a href="#arrays">Arrays</a></li>
+<li><a href="#modules">Modules</a></li>
+<li><a href="#errors">Diagnostics</a></li>
+<li><a href="#ui">UI System</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+
+</aside>
+
+<main class="content">
+
+<section class="hero">
+
+<div class="terminal-bar">
+<div class="dot red"></div>
+<div class="dot yellow"></div>
+<div class="dot green"></div>
+</div>
+
+<h1 id="hero-title">
+Vice Programming Language
+</h1>
+
+<p id="hero-text">
+Readable syntax. Explicit flow. Developer-first scripting language.
+</p>
+
+<div class="badges">
+<div class="badge">Beta 0.0.8</div>
+<div class="badge">Parser + AST</div>
+<div class="badge">Semantic Analyzer</div>
+<div class="badge">Interpreter Runtime</div>
+</div>
+
+</section>
+
+<section class="section" id="intro">
+
+<div class="section-header">
+<h2>Introduction</h2>
+</div>
+
+<div class="section-content">
+
+<p>
+Vice is a scripting language built around readable syntax,
+explicit data flow and simple semantics.
+</p>
+
+<div class="notice">
+Current state: Vice is currently in beta and some systems are temporary stubs.
+</div>
+
+<div class="code-block">
+<pre>
+<div class="code-top">
+<span class="code-lang">main.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+@entry
+fn main() {
+    output <- "Vice works.";
+}
+</code>
+</pre>
+</div>
+
+</div>
+</section>
+
+<section class="section" id="install">
+
+<div class="section-header">
+<h2>Installation & Running</h2>
+</div>
+
+<div class="section-content">
+
+<p>
+Programs are executed through the Vice CLI.
+</p>
+
+<pre>
+<div class="code-top">
+<span class="code-lang">terminal</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code>
+cargo run -- run examples/full_test_app.vice
+cargo run -- check examples/full_test_app.vice
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="basics">
+
+<div class="section-header">
+<h2>Variables & Types</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">variables.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+let name : string => "Vice";
+mut count : int => 0;
+let ready : bool => true;
+
+count += 1;
+
+output <- "Counter:", count;
+
+input -> raw_age;
+let age => to_num(raw_age);
+</code>
+</pre>
+
+<table>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>int</td>
+<td>Number value</td>
+</tr>
+
+<tr>
+<td>string</td>
+<td>Text value</td>
+</tr>
+
+<tr>
+<td>bool</td>
+<td>Boolean true/false</td>
+</tr>
+
+<tr>
+<td>Type[]</td>
+<td>Typed array</td>
+</tr>
+</table>
+
+</div>
+</section>
+
+<section class="section" id="operators">
+
+<div class="section-header">
+<h2>Vice Arrows</h2>
+</div>
+
+<div class="section-content">
+
+<table>
+<tr>
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+
+<tr>
+<td>=></td>
+<td>Initialization or named argument</td>
+</tr>
+
+<tr>
+<td><-</td>
+<td>Output flow</td>
+</tr>
+
+<tr>
+<td>-></td>
+<td>Input flow</td>
+</tr>
+</table>
+
+<pre>
+<div class="code-top">
+<span class="code-lang">flow.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+let x => 10;
+
+output <- "Value:", x;
+
+input -> username;
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="conditions">
+
+<div class="section-header">
+<h2>Conditions & Logic</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">conditions.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+if (count > 10 && ready == true) {
+    output <- "OK";
+} else {
+    output <- "Not ready";
+}
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="loops">
+
+<div class="section-header">
+<h2>Loops</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">loops.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+for i in 1..5 {
+    output <- "Step:", i;
+}
+
+let nums => [10, 20, 30];
+
+for n in nums {
+    output <- n;
+}
+
+mut count => 3;
+
+while (count > 0) {
+    output <- count;
+    count -= 1;
+}
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="functions">
+
+<div class="section-header">
+<h2>Functions</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">functions.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+fn greet(name) {
+    output <- "Hello", name;
+}
+
+fn add(a: int, b: int) -> int {
+    return a + b;
+}
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="data">
+
+<div class="section-header">
+<h2>Data Structures</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">player.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+data Player {
+    id      : int    => 1;
+    name    : string => "New Player";
+    isAdmin : bool   => false;
+}
+
+mut player => Player();
+
+player.name = "Alex";
+
+output <- player.name;
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="arrays">
+
+<div class="section-header">
+<h2>Arrays</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">arrays.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+mut values: int[] => [10, 20];
+
+values.push(30);
+
+output <- values[0];
+output <- len(values);
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="modules">
+
+<div class="section-header">
+<h2>Modules & Stdlib</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">stdlib.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+import "math_lib.vice";
+
+let clean => string.trim("  Vice Core  ");
+
+let parts => string.split(clean, " ");
+
+output <- string.upper(
+    array.join(parts, "-")
+);
+
+output <- math.max(10, 12);
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="errors">
+
+<div class="section-header">
+<h2>Diagnostics & Errors</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">error.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+error(code => 701)
+<- "Graphics driver error!";
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="ui">
+
+<div class="section-header">
+<h2>Temporary UI</h2>
+</div>
+
+<div class="section-content">
+
+<pre>
+<div class="code-top">
+<span class="code-lang">ui.vice</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code class="vice">
+let win => ui.create(
+    title => "Vice App"
+);
+
+ui.label(
+    text => "Hello UI"
+);
+
+let btn => ui.button(
+    text => "Click"
+);
+</code>
+</pre>
+
+</div>
+</section>
+
+<section class="section" id="license">
+
+<div class="section-header">
+<h2>License</h2>
+</div>
+
+<div class="section-content">
+
+<p>
+This project uses the MIT License.
+</p>
+
+<pre>
+<div class="code-top">
+<span class="code-lang">LICENSE</span>
+<button class="copy-btn">Copy</button>
+</div>
+<code>
+MIT License
+
+Copyright (c) 2026 Vice Language Project
+
+Permission is hereby granted,
+free of charge,
+to any person obtaining a copy
+of this software and associated documentation files.
+</code>
+</pre>
+
+</div>
+</section>
+
+<footer class="footer">
+© 2026 Vice Language Project — Official Documentation.
+</footer>
+
+</main>
+
+</div>
+
+<script>
+const sidebar = document.getElementById("sidebar");
+const toggle = document.getElementById("mobileToggle");
+
+toggle.addEventListener("click",()=>{
+    sidebar.classList.toggle("open");
+});
+
+document.querySelectorAll(".copy-btn").forEach(btn=>{
+
+    btn.addEventListener("click",()=>{
+
+        const code = btn.parentElement.nextElementSibling.innerText;
+
+        navigator.clipboard.writeText(code);
+
+        const old = btn.innerText;
+
+        btn.innerText = "Copied!";
+
+        setTimeout(()=>{
+            btn.innerText = old;
+        },1200);
+    });
+});
+
+function escapeHtml(text){
+    return text
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+}
+
+function highlightVice(code){
+
+    code = escapeHtml(code);
+
+    const keywords = [
+        "fn","let","mut","return",
+        "if","else","while","for",
+        "in","data","import",
+        "true","false","output",
+        "input","error"
+    ];
+
+    const types = [
+        "int","string","bool"
+    ];
+
+    code = code.replace(
+        /(@[a-zA-Z_]+)/g,
+        '<span class="attr">$1</span>'
+    );
+
+    code = code.replace(
+        /"([^"]*)"/g,
+        '<span class="string">"$1"</span>'
+    );
+
+    code = code.replace(
+        /\b(\d+)\b/g,
+        '<span class="number">$1</span>'
+    );
+
+    keywords.forEach(k=>{
+        const reg = new RegExp("\\b"+k+"\\b","g");
+
+        code = code.replace(
+            reg,
+            '<span class="kw">'+k+'</span>'
+        );
+    });
+
+    types.forEach(t=>{
+        const reg = new RegExp("\\b"+t+"\\b","g");
+
+        code = code.replace(
+            reg,
+            '<span class="type">'+t+'</span>'
+        );
+    });
+
+    return code;
+}
+
+document.querySelectorAll("code.vice").forEach(block=>{
+    block.innerHTML = highlightVice(
+        block.textContent
+    );
+});
+
+const translations = {
+    en:{
+        subtitle:"Official Documentation",
+        contents:"Contents",
+        hero:"Readable syntax. Explicit flow. Developer-first scripting language."
+    },
+
+    zh:{
+        subtitle:"官方文档",
+        contents:"目录",
+        hero:"可读语法、显式数据流、面向开发者的脚本语言。"
+    }
+};
+
+function setLang(lang){
+
+    localStorage.setItem(
+        "vice_lang",
+        lang
+    );
+
+    document.getElementById(
+        "subtitle"
+    ).innerText =
+    translations[lang].subtitle;
+
+    document.getElementById(
+        "contents-title"
+    ).innerText =
+    translations[lang].contents;
+
+    document.getElementById(
+        "hero-text"
+    ).innerText =
+    translations[lang].hero;
+
+    document.getElementById(
+        "lang-en"
+    ).classList.toggle(
+        "active",
+        lang==="en"
+    );
+
+    document.getElementById(
+        "lang-zh"
+    ).classList.toggle(
+        "active",
+        lang==="zh"
+    );
+}
+
+document.getElementById(
+    "lang-en"
+).onclick=()=>setLang("en");
+
+document.getElementById(
+    "lang-zh"
+).onclick=()=>setLang("zh");
+
+setLang(
+    localStorage.getItem(
+        "vice_lang"
+    ) || "en"
+);
+</script>
+
+</body>
+</html>
