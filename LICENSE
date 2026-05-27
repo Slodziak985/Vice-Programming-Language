@@ -3,52 +3,99 @@ GitHub: Slodziak985
 
 All rights reserved.
 
-## 1. Ownership
+---
 
-This software, including the Vice programming language, compiler, runtime, tools, and documentation, is the exclusive intellectual property of the copyright holder.
+## 1. Definitions
 
-## 2. Permission to Use
+“Software” refers to the Vice programming language, including its compiler, runtime, standard library, tooling, documentation, and any associated source code or binaries provided by the copyright holder.
 
-Permission is granted to any individual or organization to use this software, including the Vice programming language, for personal, educational, research, and commercial purposes.
+“Vice” refers to the programming language and ecosystem maintained under this name by the copyright holder.
+
+---
+
+## 2. Ownership
+
+This Software is proprietary and is the exclusive intellectual property of the copyright holder.
+
+Nothing in this license transfers ownership of the Software, the Vice language, its design, implementation, or branding.
+
+---
+
+## 3. Permission to Use
+
+Permission is granted to any individual or organization to use the Software for personal, educational, research, and commercial purposes.
 
 This includes the right to:
 
-* write and execute programs in Vice,
-* compile and run Vice applications,
+* write programs in the Vice programming language,
+* compile and execute Vice programs,
 * distribute applications created using Vice,
-* use Vice in commercial environments and products.
+* use Vice in commercial products, services, and internal systems,
+* use Vice without payment of licensing fees.
 
-## 3. Restrictions
+---
 
-You may NOT:
+## 4. Restrictions
 
-* redistribute the Vice language, compiler, runtime, or core tools as a standalone product;
-* publish or distribute modified versions of the Vice language as "Vice" or any confusingly similar name;
-* fork, clone, or rebrand the core Vice system as a competing language;
-* remove or alter copyright or ownership notices;
-* reverse engineer, decompile, or disassemble the software except where permitted by law;
-* sell the Vice language itself or any part of its core infrastructure.
+You are NOT permitted to:
 
-Modifications for private or internal use are allowed, but redistribution of modified versions is prohibited without explicit written permission from the copyright holder.
+* redistribute the Software (including compiler, runtime, or standard library) as a standalone product;
+* publish or distribute modified versions of the Software;
+* create or distribute forks of the Software as a programming language or development platform;
+* rebrand or market modified versions of Vice as “Vice” or any confusingly similar name;
+* remove, alter, or hide copyright or ownership notices;
+* reverse engineer, decompile, or disassemble the Software except where expressly permitted by applicable law;
+* use the Software’s name, branding, or identity in a way that implies official affiliation without written permission.
 
-## 4. Applications Built with Vice
+Internal modifications for private use are allowed, provided they are not redistributed.
 
-Programs created using Vice remain the sole property of their respective authors.
+---
 
-The copyright and license of Vice do NOT extend to user-created programs.
+## 5. Applications Built with Vice
 
-Users are free to sell, distribute, or license their own software written in Vice without restriction.
+Programs, applications, services, or systems created using Vice (“User Programs”) are the sole property of their respective authors.
 
-## 5. Disclaimer of Warranty
+This license does NOT impose any restrictions on User Programs.
 
-This software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement.
+Users are free to:
 
-In no event shall the copyright holder be liable for any damages or claims arising from the use of this software.
+* sell User Programs,
+* distribute User Programs,
+* license User Programs under any terms they choose,
+* use Vice as a dependency in commercial software.
 
-## 6. Termination
+---
 
-Any violation of these terms automatically terminates the rights granted under this license.
+## 6. Branding and Trademark
 
-## 7. Final Clause
+“Vice” and related names, logos, and branding are reserved for official use by the copyright holder.
 
-Use of this software constitutes acceptance of these terms.
+Any public use of the Vice name in software distributions, modified versions, or derivative platforms requires explicit written permission.
+
+---
+
+## 7. Disclaimer of Warranty
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
+
+---
+
+## 8. Limitation of Liability
+
+The copyright holder shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use the Software.
+
+---
+
+## 9. Termination
+
+Any violation of this license automatically terminates all granted permissions.
+
+Upon termination, you must cease use of the Software except where prohibited by applicable law.
+
+---
+
+## 10. Final Clause
+
+Use of the Software constitutes acceptance of this license.
