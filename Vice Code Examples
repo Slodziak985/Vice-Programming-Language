@@ -1,0 +1,378 @@
+VICE LANGUAGE EXAMPLES — FULL GUIDE
+===================================
+
+This file demonstrates how programming in Vice works in practice.
+
+It includes:
+- basic program structure
+- UI rendering
+- functions and type system
+- full Snake game example
+- step-by-step explanations
+
+============================================================
+1. HELLO WORLD
+============================================================
+
+CODE:
+
+@entry
+fn main() {
+  output <- "Hello World";
+}
+
+EXPLANATION:
+
+@entry
+- Marks the entry point of the program.
+- This is where execution starts.
+
+fn main()
+- Main function of the program.
+
+output <- "Hello World"
+- Sends output to the runtime (console / interpreter output).
+
+------------------------------------------------------------
+
+
+============================================================
+2. SIMPLE UI EXAMPLE
+============================================================
+
+CODE:
+
+@entry
+@intent("UI_ROOT")
+fn main() {
+    mut win: Window => ui.create(
+        title => "Vice UI Rect",
+        size => [640, 360],
+        color => "#202020"
+    );
+
+    while (win : is_open) {
+        ui.rect(pos => [40, 40], size => [180, 90], color => "#00ff88");
+        ui.rect(pos => [260, 120], size => [220, 140], color => "#4477ff");
+    }
+}
+
+EXPLANATION:
+
+@intent("UI_ROOT")
+- Tells runtime this is a UI application.
+
+mut win
+- Creates a mutable window object.
+
+ui.create(...)
+- Creates a window with title, size, and background color.
+
+while (win : is_open)
+- Main render loop, runs while window is open.
+
+ui.rect(...)
+- Draws a rectangle on screen:
+  - pos = position
+  - size = dimensions
+  - color = fill color
+
+------------------------------------------------------------
+
+
+============================================================
+3. FUNCTIONS AND TYPE LEVELS
+============================================================
+
+CODE:
+
+@highlevel
+fn precise_divide(a: int, b: int) -> float {
+    return a / b;
+}
+
+@lowlevel
+fn truncate_to_int(value: float) -> int {
+    let packed: int => value;
+    return packed;
+}
+
+@autocheck
+fn inferred_score(seed: int) -> int {
+    let doubled => seed * 2;
+    let bonus => len([1, 2, 3]);
+    return doubled + bonus;
+}
+
+EXPLANATION:
+
+@highlevel
+- Safe, higher-level function.
+- Runtime may apply checks or conversions.
+
+@lowlevel
+- Lower-level function.
+- Allows direct control and unsafe-style operations.
+
+@autocheck
+- Enables automatic type inference and validation.
+
+let doubled => seed * 2
+- Type is inferred automatically.
+
+let packed: int => value
+- Explicit type conversion.
+
+------------------------------------------------------------
+
+
+============================================================
+4. SNAKE GAME (FULL EXAMPLE)
+============================================================
+
+============================================================
+4.1 OVERVIEW
+============================================================
+
+This is a simple Snake game written in Vice.
+
+It demonstrates:
+- data structures
+- game loop
+- state management
+- input handling
+- rendering system
+
+============================================================
+
+
+============================================================
+4.2 DATA STRUCTURES
+============================================================
+
+SnakeSegment:
+
+data SnakeSegment {
+    x: int => 0;
+    y: int => 0;
+    color: string => "#00ff00";
+    size: int => 20;
+}
+
+Represents one segment of the snake.
+
+Each segment has:
+- x, y position on grid
+- color (green)
+- size (square size)
+
+------------------------------------------------------------
+
+Food:
+
+data Food {
+    x: int => 0;
+    y: int => 0;
+    color: string => "#ff0000";
+    size: int => 20;
+}
+
+Represents food in the game.
+
+------------------------------------------------------------
+
+GameState:
+
+data GameState {
+    snake: SnakeSegment[] => [];
+    food: Food => Food();
+    direction_x: int => 1;
+    direction_y: int => 0;
+    segment_size: int => 20;
+    game_width: int => 800;
+    game_height: int => 600;
+    score: int => 0;
+    game_over: bool => false;
+    last_tick: int => 1;
+}
+
+This is the full game state:
+- snake body
+- food position
+- movement direction
+- score
+- timing
+
+------------------------------------------------------------
+
+
+============================================================
+4.3 RANDOM POSITION GENERATION
+============================================================
+
+FUNCTION:
+
+fn random_coord(max_val: int, segment_size: int, offset: int) -> int {
+    let current_time_ms: int => time.now_ms() + offset;
+    let num_segments: int => max_val / segment_size;
+
+    let div_result: int => current_time_ms / num_segments;
+    let floor_div_result: int => math.floor(div_result);
+    let rand_segment: int => current_time_ms - floor_div_result * num_segments;
+
+    let final_rand_segment: int => math.abs(rand_segment);
+    return final_rand_segment * segment_size;
+}
+
+EXPLANATION:
+
+- Uses time to generate pseudo-random numbers
+- Converts time into grid-based positions
+- Ensures food aligns with snake grid
+
+------------------------------------------------------------
+
+
+============================================================
+4.4 INITIALIZATION
+============================================================
+
+FUNCTION:
+
+fn init_game_state() -> GameState
+
+EXPLANATION:
+
+Creates initial game state:
+
+- snake starts in center
+- food is randomly placed
+- direction = right
+- score = 0
+
+Key idea:
+This function builds the first "snapshot" of the game world.
+
+------------------------------------------------------------
+
+
+============================================================
+4.5 GAME UPDATE LOGIC
+============================================================
+
+FUNCTION:
+
+fn update_game_state(mut state: GameState) -> GameState
+
+EXPLANATION:
+
+This is the core game engine logic.
+
+STEP 1 — Move snake head:
+- calculates new position
+
+STEP 2 — Screen wrapping:
+- if snake goes out of bounds → appears on opposite side
+
+STEP 3 — Create new snake:
+- always rebuilds snake state
+
+STEP 4 — Collision with food:
+- increase score
+- move food
+- grow snake
+
+STEP 5 — Movement without food:
+- remove tail segment
+- simulate movement
+
+Key idea:
+Each frame creates a new version of GameState.
+
+------------------------------------------------------------
+
+
+============================================================
+4.6 RENDERING
+============================================================
+
+FUNCTION:
+
+fn draw_game_state(state: GameState)
+
+EXPLANATION:
+
+- draws snake segments
+- draws food
+- uses ui.rect for rendering
+
+Each segment = one rectangle on screen.
+
+------------------------------------------------------------
+
+
+============================================================
+4.7 MAIN LOOP
+============================================================
+
+CODE:
+
+@entry
+fn main() {
+    mut game: GameState => init_game_state();
+
+    mut win => ui.create(
+        title => "Vice Snake",
+        size => [game.game_width, game.game_height],
+        color => "#202020"
+    );
+
+    while (win : is_open) {
+
+        INPUT:
+        - arrow keys change direction
+        - prevents reversing instantly
+
+        UPDATE:
+        - runs every 150ms
+        - calls update_game_state
+
+        RENDER:
+        - draws snake and food
+
+    }
+}
+
+EXPLANATION:
+
+This is a classic GAME LOOP:
+
+1. Read input
+2. Update world state
+3. Render frame
+4. Repeat
+
+This pattern is used in almost all games.
+
+============================================================
+
+
+============================================================
+FINAL CONCEPT SUMMARY
+============================================================
+
+Vice programming introduces:
+
+- structured data models
+- explicit state management
+- hybrid high/low-level functions
+- UI integration
+- predictable game loop model
+
+Core idea:
+
+> A program is a sequence of state transformations over time.
+
+============================================================
+END OF FILE
+============================================================
