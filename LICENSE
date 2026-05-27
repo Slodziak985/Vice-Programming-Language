@@ -1,0 +1,54 @@
+Copyright (c) 2026 Konrad Artur Konior
+GitHub: Slodziak985
+
+All rights reserved.
+
+## 1. Ownership
+
+This software, including the Vice programming language, compiler, runtime, tools, and documentation, is the exclusive intellectual property of the copyright holder.
+
+## 2. Permission to Use
+
+Permission is granted to any individual or organization to use this software, including the Vice programming language, for personal, educational, research, and commercial purposes.
+
+This includes the right to:
+
+* write and execute programs in Vice,
+* compile and run Vice applications,
+* distribute applications created using Vice,
+* use Vice in commercial environments and products.
+
+## 3. Restrictions
+
+You may NOT:
+
+* redistribute the Vice language, compiler, runtime, or core tools as a standalone product;
+* publish or distribute modified versions of the Vice language as "Vice" or any confusingly similar name;
+* fork, clone, or rebrand the core Vice system as a competing language;
+* remove or alter copyright or ownership notices;
+* reverse engineer, decompile, or disassemble the software except where permitted by law;
+* sell the Vice language itself or any part of its core infrastructure.
+
+Modifications for private or internal use are allowed, but redistribution of modified versions is prohibited without explicit written permission from the copyright holder.
+
+## 4. Applications Built with Vice
+
+Programs created using Vice remain the sole property of their respective authors.
+
+The copyright and license of Vice do NOT extend to user-created programs.
+
+Users are free to sell, distribute, or license their own software written in Vice without restriction.
+
+## 5. Disclaimer of Warranty
+
+This software is provided "AS IS", without warranty of any kind, express or implied, including but not limited to merchantability, fitness for a particular purpose, or non-infringement.
+
+In no event shall the copyright holder be liable for any damages or claims arising from the use of this software.
+
+## 6. Termination
+
+Any violation of these terms automatically terminates the rights granted under this license.
+
+## 7. Final Clause
+
+Use of this software constitutes acceptance of these terms.
