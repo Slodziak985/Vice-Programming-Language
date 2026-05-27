@@ -467,7 +467,9 @@
 
             <ul>
                 <li><a href="#intro" data-i18n="nav-intro">Introduction</a></li>
+                <li><a href="#goals" data-i18n="nav-goals">Goals</a></li>
                 <li><a href="#install" data-i18n="nav-install">Installation</a></li>
+                <li><a href="#examples" data-i18n="nav-examples">Examples</a></li>
                 <li><a href="#basics" data-i18n="nav-basics">Basics</a></li>
                 <li><a href="#operators" data-i18n="nav-operators">Operators</a></li>
                 <li><a href="#conditions" data-i18n="nav-conditions">Conditions</a></li>
@@ -502,7 +504,7 @@
                 </p>
 
                 <div class="badges">
-                    <div class="badge" data-i18n="badge-beta">Beta 0.0.8</div>
+                    <div class="badge" data-i18n="badge-beta">Stable 0.0.9</div>
                     <div class="badge" data-i18n="badge-parser">Parser + AST</div>
                     <div class="badge" data-i18n="badge-semantic">Semantic Analyzer</div>
                     <div class="badge" data-i18n="badge-interpreter">Interpreter Runtime</div>
@@ -519,8 +521,10 @@
                 <div class="section-content">
 
                     <p data-i18n="section-intro-p1">
-                        Vice is a scripting language built around readable syntax,
-                        explicit data flow and simple semantics.
+                        Vice is a small, readable language project built for experiments, scripts, demos, and simple interactive tools.
+                    </p>
+                    <p data-i18n="section-intro-p2">
+                        The current goal is to keep the syntax approachable while providing a usable CLI, installer, examples, and a growing runtime.
                     </p>
 
                     <div class="notice" data-i18n="section-intro-notice">
@@ -545,6 +549,21 @@ fn main() {
                 </div>
             </section>
 
+            <section class="section" id="goals">
+                <div class="section-header">
+                    <h2 data-i18n="section-goals-title">Project Goals</h2>
+                </div>
+                <div class="section-content">
+                    <p data-i18n="section-goals-p1">Vice aims to combine a clear syntax, typed data flow, and a lightweight runtime for small applications and educational use.</p>
+                    <ul style="margin-left:18px; color:#bfd1c1;">
+                        <li data-i18n="goal-1">Readable language design with explicit flow.</li>
+                        <li data-i18n="goal-2">Simple CLI workflow for run, check, and example projects.</li>
+                        <li data-i18n="goal-3">Windows and Linux release bundles for easy installation.</li>
+                        <li data-i18n="goal-4">A flexible base for demos, prototypes, and games.</li>
+                    </ul>
+                </div>
+            </section>
+
             <section class="section" id="install">
 
                 <div class="section-header">
@@ -554,7 +573,10 @@ fn main() {
                 <div class="section-content">
 
                     <p data-i18n="section-install-p1">
-                        Programs are executed through the Vice CLI.
+                        You can run Vice from source or install the ready-made release bundles from GitHub Releases.
+                    </p>
+                    <p data-i18n="section-install-p2">
+                        Linux: use the generated archive and run ./vice-installer. Windows: use the Windows archive and run vice-installer.exe.
                     </p>
 
                     <pre>
@@ -568,6 +590,27 @@ cargo run -- check examples/full_test_app.vice
 </code>
 </pre>
 
+                </div>
+            </section>
+
+            <section class="section" id="examples">
+                <div class="section-header">
+                    <h2 data-i18n="section-examples-title">Examples & Samples</h2>
+                </div>
+                <div class="section-content">
+                    <p data-i18n="section-examples-p1">The repository already contains sample programs including the main demo, the snake game, and UI examples.</p>
+                    <pre>
+<div class="code-top">
+<span class="code-lang">examples</span>
+<button class="copy-btn" data-i18n-copy>Copy</button>
+</div>
+<code>
+examples/main.vice
+examples/snake_game.vice
+examples/ui_test.vice
+examples/full_test_app.vice
+</code>
+</pre>
                 </div>
             </section>
 
@@ -906,7 +949,7 @@ let btn => ui.button(
                 <div class="section-content">
 
                     <p data-i18n="section-license-p1">
-                        This project uses the MIT License.
+                        This project is proprietary. All rights are reserved by Konrad Artur Konior (GitHub: Slodziak985).
                     </p>
 
                     <pre>
@@ -915,14 +958,17 @@ let btn => ui.button(
 <button class="copy-btn" data-i18n-copy>Copy</button>
 </div>
 <code>
-MIT License
+Proprietary License
 
-Copyright (c) 2026 Vice Language Project
+Copyright (c) 2026 Konrad Artur Konior
+GitHub: Slodziak985
 
-Permission is hereby granted,
-free of charge,
-to any person obtaining a copy
-of this software and associated documentation files.
+All rights reserved.
+
+This software is proprietary and confidential.
+Personal use is allowed only.
+Copying, modification, redistribution, sublicensing,
+or commercial use is prohibited without written permission.
 </code>
 </pre>
 
@@ -1034,7 +1080,9 @@ of this software and associated documentation files.
                 "subtitle": "Official Documentation",
                 "contents": "Contents",
                 "nav-intro": "Introduction",
+                "nav-goals": "Goals",
                 "nav-install": "Installation",
+                "nav-examples": "Examples",
                 "nav-basics": "Basics",
                 "nav-operators": "Operators",
                 "nav-conditions": "Conditions",
@@ -1048,15 +1096,25 @@ of this software and associated documentation files.
                 "nav-license": "License",
                 "hero-title": "Vice Programming Language",
                 "hero-text": "Readable syntax. Explicit flow. Developer-first scripting language.",
-                "badge-beta": "Beta 0.0.8",
+                "badge-beta": "Stable 0.0.9",
                 "badge-parser": "Parser + AST",
                 "badge-semantic": "Semantic Analyzer",
                 "badge-interpreter": "Interpreter Runtime",
                 "section-intro-title": "Introduction",
-                "section-intro-p1": "Vice is a scripting language built around readable syntax, explicit data flow and simple semantics.",
+                "section-intro-p1": "Vice is a small, readable language project built for experiments, scripts, demos, and simple interactive tools.",
+                "section-intro-p2": "The current goal is to keep the syntax approachable while providing a usable CLI, installer, examples, and a growing runtime.",
                 "section-intro-notice": "Current state: Vice is currently in beta and some systems are temporary stubs.",
+                "section-goals-title": "Project Goals",
+                "section-goals-p1": "Vice aims to combine a clear syntax, typed data flow, and a lightweight runtime for small applications and educational use.",
+                "goal-1": "Readable language design with explicit flow.",
+                "goal-2": "Simple CLI workflow for run, check, and example projects.",
+                "goal-3": "Windows and Linux release bundles for easy installation.",
+                "goal-4": "A flexible base for demos, prototypes, and games.",
                 "section-install-title": "Installation & Running",
-                "section-install-p1": "Programs are executed through the Vice CLI.",
+                "section-install-p1": "You can run Vice from source or install the ready-made release bundles from GitHub Releases.",
+                "section-install-p2": "Linux: use the generated archive and run ./vice-installer. Windows: use the Windows archive and run vice-installer.exe.",
+                "section-examples-title": "Examples & Samples",
+                "section-examples-p1": "The repository already contains sample programs including the main demo, the snake game, and UI examples.",
                 "section-basics-title": "Variables & Types",
                 "table-type": "Type",
                 "table-description": "Description",
@@ -1079,7 +1137,7 @@ of this software and associated documentation files.
                 "section-errors-title": "Diagnostics & Errors",
                 "section-ui-title": "Temporary UI",
                 "section-license-title": "License",
-                "section-license-p1": "This project uses the MIT License.",
+                "section-license-p1": "This project is proprietary. All rights are reserved by Konrad Artur Konior (GitHub: Slodziak985).",
                 "footer-text": "© 2026 Vice Language Project — Official Documentation.",
                 "watermark": "© Vice Language Project — All rights reserved",
                 "copy-btn": "Copy",
@@ -1090,7 +1148,9 @@ of this software and associated documentation files.
                 "subtitle": "官方文档",
                 "contents": "目录",
                 "nav-intro": "简介",
+                "nav-goals": "目标",
                 "nav-install": "安装",
+                "nav-examples": "示例",
                 "nav-basics": "基础",
                 "nav-operators": "运算符",
                 "nav-conditions": "条件",
@@ -1104,15 +1164,25 @@ of this software and associated documentation files.
                 "nav-license": "许可证",
                 "hero-title": "Vice 编程语言",
                 "hero-text": "可读语法、显式数据流、面向开发者的脚本语言。",
-                "badge-beta": "Beta 0.0.8",
+                "badge-beta": "稳定 0.0.9",
                 "badge-parser": "解析器 + AST",
                 "badge-semantic": "语义分析器",
                 "badge-interpreter": "解释器运行时",
                 "section-intro-title": "简介",
-                "section-intro-p1": "Vice 是一门围绕可读语法、显式数据流和简洁语义构建的脚本语言。",
+                "section-intro-p1": "Vice 是一个面向实验、脚本、演示和轻量交互工具的可读型语言项目。",
+                "section-intro-p2": "当前目标是保持语法清晰，同时提供可用的 CLI、安装器、示例和不断扩展的运行时。",
                 "section-intro-notice": "当前状态：Vice 目前处于测试阶段，部分系统为临时占位。",
+                "section-goals-title": "项目目标",
+                "section-goals-p1": "Vice 旨在把清晰的语法、类型化的数据流和轻量运行时结合起来，服务于小型应用和教学场景。",
+                "goal-1": "以显式数据流为核心的可读语言设计。",
+                "goal-2": "简洁的 CLI 工作流，支持运行、检查和示例项目。",
+                "goal-3": "提供 Linux 与 Windows 的发布安装包。",
+                "goal-4": "作为演示、原型和游戏项目的基础平台。",
                 "section-install-title": "安装与运行",
-                "section-install-p1": "程序通过 Vice CLI 执行。",
+                "section-install-p1": "你可以直接从源码运行，也可以使用 GitHub Releases 里的预编译安装包。",
+                "section-install-p2": "Linux：解压归档后运行 ./vice-installer；Windows：解压后运行 vice-installer.exe。",
+                "section-examples-title": "示例与样例",
+                "section-examples-p1": "仓库中已经包含主演示、蛇游戏和 UI 示例等样例程序。",
                 "section-basics-title": "变量与类型",
                 "table-type": "类型",
                 "table-description": "描述",
@@ -1135,7 +1205,7 @@ of this software and associated documentation files.
                 "section-errors-title": "诊断与错误",
                 "section-ui-title": "临时 UI",
                 "section-license-title": "许可证",
-                "section-license-p1": "本项目使用 MIT 许可证。",
+                "section-license-p1": "本项目为专有软件，所有权利由 Konrad Artur Konior（GitHub: Slodziak985）保留。",
                 "footer-text": "© 2026 Vice Language Project — 官方文档。",
                 "watermark": "© Vice Language Project — 版权所有",
                 "copy-btn": "复制",
