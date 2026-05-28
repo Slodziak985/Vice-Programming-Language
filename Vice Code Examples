@@ -355,6 +355,216 @@ This is a classic GAME LOOP:
 This pattern is used in almost all games.
 
 ============================================================
+Snake Game Full Code
+============================================================
+
+@autocheck
+// Define the data structure for a single snake segment
+data SnakeSegment {
+    x: int => 0;
+    y: int => 0;
+    color: string => "#00ff00"; // Green
+    size: int => 20;
+}
+
+// Define the data structure for the food
+data Food {
+    x: int => 0;
+    y: int => 0;
+    color: string => "#ff0000"; // Red
+    size: int => 20;
+}
+
+// Define the main game state
+data GameState {
+    snake: SnakeSegment[] => [];
+    food: Food => Food();
+    direction_x: int => 1; // 1: right, -1: left, 0: no horizontal movement
+    direction_y: int => 0; // 1: down, -1: up, 0: no vertical movement
+    segment_size: int => 20;
+    game_width: int => 800;
+    game_height: int => 600;
+    score: int => 0;
+    game_over: bool => false;
+    last_tick: int => 1;
+}
+
+// Helper function to generate a pseudo-random coordinate
+// This function relies on Vice's 'int' type being f64 at runtime
+// and uses math.floor and math.abs to simulate integer arithmetic and modulo.
+fn random_coord(max_val: int, segment_size: int, offset: int) -> int {
+    // Get current time in milliseconds as a float
+    let current_time_ms: int => time.now_ms() + offset;
+
+    // Calculate number of segments along one axis
+    let num_segments: int => max_val / segment_size;
+
+    // Symulacja modulo: a - floor(a / b) * b
+    let div_result: int => current_time_ms / num_segments;
+    let floor_div_result: int => math.floor(div_result);
+    let rand_segment: int => current_time_ms - floor_div_result * num_segments;
+    
+    // Ensure the result is positive
+    let final_rand_segment: int => math.abs(rand_segment);
+
+    // Return the coordinate snapped to the grid
+    return final_rand_segment * segment_size;
+}
+
+// Function to initialize the game state
+fn init_game_state() -> GameState {
+    let segment_size: int => 20;
+    let game_width: int => 800;
+    let game_height: int => 600;
+
+    // Initial snake head position
+    let head: SnakeSegment => SnakeSegment(
+        x => game_width / 2,
+        y => game_height / 2,
+        color => "#00ff00", // Green
+        size => segment_size
+    );
+
+    // Initial food position (pseudo-random)
+    let food_x: int => random_coord(game_width - segment_size, segment_size, 0);
+    let food_y: int => random_coord(game_height - segment_size, segment_size, 7);
+    let food_item: Food => Food(
+        x => food_x,
+        y => food_y,
+        color => "#ff0000", // Red
+        size => segment_size
+    );
+
+    let mut initial_snake: SnakeSegment[] => [];
+    initial_snake.push(head);
+
+    return GameState(
+        snake => initial_snake,
+        food => food_item,
+        direction_x => 1, // Start moving right
+        direction_y => 0,
+        segment_size => segment_size,
+        game_width => game_width,
+        game_height => game_height,
+        score => 0,
+        game_over => false,
+        last_tick => time.now_ms()
+    );
+}
+
+// Function to update the game state
+fn update_game_state(mut state: GameState) -> GameState {
+    if (state : game_over) {
+        return state;
+    }
+
+    let head: SnakeSegment => state.snake[0];
+    let mut new_head_x: int => head.x + state.direction_x * state.segment_size;
+    let mut new_head_y: int => head.y + state.direction_y * state.segment_size;
+
+    // Wrap around screen edges
+    if (new_head_x < 0) {
+        new_head_x = state.game_width - state.segment_size;
+    } else if (new_head_x >= state.game_width) {
+        new_head_x = 0;
+    }
+    if (new_head_y < 0) {
+        new_head_y = state.game_height - state.segment_size;
+    } else if (new_head_y >= state.game_height) {
+        new_head_y = 0;
+    }
+
+    let mut new_snake: SnakeSegment[] => [];
+    let new_head: SnakeSegment => SnakeSegment(
+        x => new_head_x,
+        y => new_head_y,
+        color => head.color,
+        size => head.size
+    );
+    new_snake.push(new_head);
+
+    // Check for food collision
+    if (new_head.x == state.food.x && new_head.y == state.food.y) {
+        state.score = state.score + 1;
+        // Move food to a new pseudo-random position
+        state.food.x = random_coord(state.game_width - state.segment_size, state.segment_size, state.score);
+        state.food.y = random_coord(state.game_height - state.segment_size, state.segment_size, state.score + 7);
+        // Snake grows by adding all previous segments
+        for segment in state.snake {
+            new_snake.push(segment);
+        }
+    } else {
+        // If no food eaten, just shift segments (remove tail, add new head)
+        // Copy all but the last segment to simulate movement
+        let mut i: int => 0;
+        while (i < len(state.snake) - 1) {
+            new_snake.push(state.snake[i]);
+            i = i + 1;
+        }
+    }
+
+    state.snake = new_snake;
+    return state;
+}
+
+// Function to draw the game state
+fn draw_game_state(state: GameState) {
+    // Draw snake segments
+    for segment in state.snake {
+        ui.rect(
+            pos => [segment.x, segment.y],
+            size => [segment.size, segment.size],
+            color => segment.color
+        );
+    }
+
+    // Draw food
+    ui.rect(
+        pos => [state.food.x, state.food.y],
+        size => [state.food.size, state.food.size],
+        color => state.food.color
+    );
+}
+
+@entry
+fn main() {
+    mut game: GameState => init_game_state();
+
+    mut win => ui.create(
+        title => "Vice Snake",
+        size => [game.game_width, game.game_height],
+        color => "#202020" // Dark grey background
+    );
+
+    while (win : is_open) {
+        # Obsługa wejścia (klawisze)
+        if (win : key_up && (game.direction_y == 0)) {
+            game.direction_x = 0; game.direction_y = -1;
+        }
+        if (win : key_down && (game.direction_y == 0)) {
+            game.direction_x = 0; game.direction_y = 1;
+        }
+        if (win : key_left && (game.direction_x == 0)) {
+            game.direction_x = -1; game.direction_y = 0;
+        }
+        if (win : key_right && (game.direction_x == 0)) {
+            game.direction_x = 1; game.direction_y = 0;
+        }
+
+        # Logika ruchu co 150ms
+        let now => time.now_ms();
+        if (now - game.last_tick > 150) {
+            game = update_game_state(game);
+            game.last_tick = now;
+        }
+
+        // Draw game state
+        draw_game_state(game);
+
+        // The UI thread has an implicit sleep (16ms) which controls the frame rate.
+        // No explicit sleep needed here for basic animation.
+    }
+}
 
 
 ============================================================
