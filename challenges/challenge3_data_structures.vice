@@ -1,0 +1,41 @@
+data Logo {
+    x: int => 100;
+    y: int => 100;
+    dx: int => 5;
+    dy: int => 4;
+}
+
+@entry
+fn main() {
+
+    let width => 800;
+    let height => 600;
+
+    mut logo => Logo();
+
+    mut win => ui.create(
+        title => "DVD Bounce",
+        size => [width, height],
+        color => "#000000"
+    );
+
+    while (win : is_open) {
+
+        logo.x = logo.x + logo.dx;
+        logo.y = logo.y + logo.dy;
+
+        if (logo.x < 0 || logo.x > width - 120) {
+            logo.dx = -logo.dx;
+        }
+
+        if (logo.y < 0 || logo.y > height - 60) {
+            logo.dy = -logo.dy;
+        }
+
+        ui.rect(
+            pos => [logo.x, logo.y],
+            size => [120, 60],
+            color => "#ff00aa"
+        );
+    }
+}

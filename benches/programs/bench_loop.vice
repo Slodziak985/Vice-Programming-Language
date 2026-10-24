@@ -1,0 +1,10 @@
+@entry
+fn main() {
+    let start => time.now_ms();
+    mut i => 0;
+    while (i < 10000000) {
+        i = i + 1;
+    }
+    let end => time.now_ms();
+    output <- "Loop 10M took: " + to_str(end - start) + " ms";
+}

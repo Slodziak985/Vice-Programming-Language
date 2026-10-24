@@ -1,0 +1,5 @@
+@entry
+fn main() {
+    let total: string => "not a number";
+    output <- total;
+}

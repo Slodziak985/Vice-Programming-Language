@@ -1,0 +1,10 @@
+# Test 010: Math square root and power
+fn main() {
+    mut sq = math.sqrt(144.0);
+    mut pw = math.pow(2.0, 8.0);
+    if sq > 11.99 and sq < 12.01 and pw > 255.99 and pw < 256.01 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

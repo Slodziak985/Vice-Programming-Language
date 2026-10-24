@@ -1,0 +1,17 @@
+@autocheck
+@entry
+fn main() {
+    let width => 800;
+    let height => 600;
+
+    mut win => ui.window(
+        title => "Windows App",
+        size => [width, height],
+        color => "#1a1a1a"
+    );
+
+    while (ui.frame(win)) {
+        let color => "#1a1a";
+    }
+
+}

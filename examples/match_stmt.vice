@@ -1,0 +1,10 @@
+@entry
+fn main() {
+  let n: int => 5;
+  match n {
+    1 => { output <- "one"; }
+    5 => { output <- "five"; }
+    _ => { output <- "other"; }
+  }
+  return;
+}

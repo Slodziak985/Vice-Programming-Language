@@ -1,0 +1,55 @@
+# Heavy Test 023: 2D Raycasting Simulation 23
+data RaycastHit23 {
+    wall_dist: float,
+    wall_x: int,
+    wall_y: int,
+    hit: bool
+}
+
+fn cast_single_ray(map_grid: array, map_w: int, map_h: int, px: float, py: float, ray_dir_x: float, ray_dir_y: float) -> RaycastHit23 {
+    mut dist = 0.0;
+    mut step_size = 0.1;
+    mut max_range = 10.0;
+    
+    mut cur_x = px;
+    mut cur_y = py;
+    
+    while dist < max_range {
+        cur_x = cur_x + (ray_dir_x * step_size);
+        cur_y = cur_y + (ray_dir_y * step_size);
+        dist = dist + step_size;
+        
+        mut mx = math.floor(cur_x);
+        mut my = math.floor(cur_y);
+        
+        if mx >= 0 and mx < map_w and my >= 0 and my < map_h {
+            mut grid_idx = (my * map_w) + mx;
+            if map_grid[grid_idx] == 1 {
+                return RaycastHit23(dist, mx, my, true);
+            }
+        } else {
+            return RaycastHit23(max_range, -1, -1, false);
+        }
+    }
+    return RaycastHit23(max_range, -1, -1, false);
+}
+
+fn main() {
+    # 5x5 map with outer walls
+    mut map_5x5 = [
+        1, 1, 1, 1, 1,
+        1, 0, 0, 0, 1,
+        1, 0, 1, 0, 1,
+        1, 0, 0, 0, 1,
+        1, 1, 1, 1, 1
+    ];
+    
+    # Cast ray from (1.5, 1.5) towards (1.0, 0.0) -> east
+    mut hit = cast_single_ray(map_5x5, 5, 5, 1.5, 1.5, 1.0, 0.0);
+    
+    if hit.hit and hit.wall_dist > 0.0 and hit.wall_dist < 5.0 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

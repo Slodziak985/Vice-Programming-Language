@@ -1,0 +1,26 @@
+@autocheck
+# Test komentarzy typu hash - to powinno zostać zignorowane
+// Test komentarzy typu slash - to również
+
+@entry
+fn main() {
+    mut x => 10;
+    mut y => 100;
+
+    output <- "--- START ---";
+    output <- x; // Powinno wypisać: 10
+
+    {
+        # Wchodzimy w nowy zakres (Block)
+        mut x => 5;  // To jest nowa zmienna x, która "zasłania" tę globalną
+        y = 200;     // To powinno zmienić wartość y w zakresie wyżej
+
+        output <- "--- WEWNATRZ BLOKU ---";
+        output <- x; // Powinno wypisać: 5
+        output <- y; // Powinno wypisać: 200
+    }
+
+    output <- "--- PO WYJSCIU Z BLOKU ---";
+    output <- x; // Powinno wrócić: 10 (stara wartość x)
+    output <- y; // Powinno zostać: 200 (y zostało zmienione na stałe)
+}

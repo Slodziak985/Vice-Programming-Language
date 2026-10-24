@@ -1,0 +1,23 @@
+# Crypto and Modular Package Resolution in Vice 0.2
+use "my_math";
+
+fn main() {
+    output <- "--- Vice Crypto and Modules Test ---";
+
+    # Test funkcji z zaimportowanego modulu
+    mut hyp = calculate_hypotenuse(3.0, 4.0);
+    output <- "Przeciwprostokatna (3, 4):";
+    output <- hyp;
+
+    # Test generowania bezpiecznego tokenu SHA256 + Base64
+    mut token = generate_secure_token("AI_SESSION", "vice-secret-seed-2026");
+    output <- "Wygenerowany token kryptograficzny:";
+    output <- token;
+
+    # Bezposrednie uzycie modulu crypto
+    mut raw_hash = crypto.sha256("test-data");
+    output <- "SHA256 z 'test-data':";
+    output <- raw_hash;
+
+    output <- "Wszystkie testy modulowe i kryptograficzne zakonczone sukcesem!";
+}

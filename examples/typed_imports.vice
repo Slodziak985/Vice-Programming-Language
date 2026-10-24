@@ -1,0 +1,13 @@
+@mount "math_lib.vice";
+
+@entry
+fn main() {
+    mut nums: int[] => [1, 2, 3];
+    nums.push(4);
+
+    mut point: Point => Point();
+    point.x = add(nums[0], len(nums));
+    point.y = 9;
+
+    output <- "Point:", point.x, point.y;
+}

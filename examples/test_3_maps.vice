@@ -1,0 +1,34 @@
+fn map_test() -> bool {
+    let mut dict => {
+        "hello": "world",
+        "vice": "language"
+    };
+    
+    if (dict["hello"] != "world") {
+        return false;
+    }
+    
+    dict["hello"] = "vice";
+    if (dict["hello"] != "vice") {
+        return false;
+    }
+    
+    let mut empty_dict: map[string, string] => {};
+    empty_dict["test"] = "ok";
+    
+    if (empty_dict["test"] != "ok") {
+        return false;
+    }
+    
+    return true;
+}
+@entry
+fn main() {
+    output <- "Running test 3 (Maps)...";
+    let res => map_test();
+    if (res) {
+        output <- "Test 3 Passed!";
+    } else {
+        error() <- "Test 3 Failed!";
+    }
+}

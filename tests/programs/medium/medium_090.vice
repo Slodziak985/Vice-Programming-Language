@@ -1,0 +1,39 @@
+# Medium Test 090: Merkle Tree Leaf and Root Hash 90
+fn hash_pair(left: string, right: string) -> string {
+    return crypto.sha256(left + ":" + right);
+}
+
+fn build_merkle_root(leaves: array) -> string {
+    mut cur = leaves;
+    while array.len(cur) > 1 {
+        mut next_level = [];
+        mut k = 0;
+        while k < array.len(cur) {
+            if k + 1 < array.len(cur) {
+                next_level = array.push(next_level, hash_pair(cur[k], cur[k + 1]));
+            } else {
+                next_level = array.push(next_level, hash_pair(cur[k], cur[k]));
+            }
+            k = k + 2;
+        }
+        cur = next_level;
+    }
+    return cur[0];
+}
+
+fn main() {
+    mut txs = [
+        crypto.sha256("tx1_90"),
+        crypto.sha256("tx2_90"),
+        crypto.sha256("tx3_90"),
+        crypto.sha256("tx4_90")
+    ];
+    mut root = build_merkle_root(txs);
+    mut root_len = string.len(root);
+    
+    if root_len == 64 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,10 @@
+data NetworkError {
+    url: string => "";
+    status_code: int => 404;
+}
+
+@entry
+fn main() {
+    let my_error => NetworkError(url => "api.vice", status_code => 500);
+    error(code => 2) <- my_error;
+}

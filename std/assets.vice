@@ -1,0 +1,21 @@
+fn assets_manifest_empty() {
+    return json.parse("{\"version\":1,\"kind\":\"assets\",\"textures\":[],\"spritesheets\":[],\"audio\":[],\"fonts\":[]}");
+}
+
+fn assets_load_manifest(path: string) {
+    return fs.read_json(path);
+}
+
+fn assets_save_manifest(path: string, manifest) -> bool {
+    return fs.write_json(path, manifest);
+}
+
+fn assets_texture(id: string, path: string) {
+    let source => "{\"id\":\"" + id + "\",\"path\":\"" + path + "\",\"kind\":\"texture\"}";
+    return json.parse(source);
+}
+
+fn assets_spritesheet(id: string, path: string, frame_width: int, frame_height: int) {
+    let source => "{\"id\":\"" + id + "\",\"path\":\"" + path + "\",\"kind\":\"spritesheet\",\"frame_width\":" + to_str(frame_width) + ",\"frame_height\":" + to_str(frame_height) + "}";
+    return json.parse(source);
+}

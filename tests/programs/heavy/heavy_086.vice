@@ -1,0 +1,76 @@
+# Heavy Test 086: Blockchain Simulator with Proof-of-Work 86
+data Block86 {
+    index: int,
+    prev_hash: string,
+    data_payload: string,
+    nonce: int,
+    hash: string
+}
+
+fn calculate_block_hash(idx: int, prev: string, payload: string, nonce: int) -> string {
+    mut s = string.from_int(idx) + ":" + prev + ":" + payload + ":" + string.from_int(nonce);
+    return crypto.sha256(s);
+}
+
+fn mine_block(idx: int, prev: string, payload: string, diff: string) -> Block86 {
+    mut nonce = 0;
+    while true {
+        mut h = calculate_block_hash(idx, prev, payload, nonce);
+        if string.starts_with(h, diff) {
+            return Block86(idx, prev, payload, nonce, h);
+        }
+        nonce = nonce + 1;
+    }
+    return Block86(idx, prev, payload, 0, "");
+}
+
+data Blockchain86 {
+    chain: array,
+    difficulty: string
+}
+
+fn blockchain_new(diff: string) -> Blockchain86 {
+    mut genesis_hash = crypto.sha256("genesis_block_0");
+    mut genesis = Block86(0, "0", "Genesis Data", 0, genesis_hash);
+    return Blockchain86([genesis], diff);
+}
+
+fn blockchain_add(bc: Blockchain86, payload: string) -> Blockchain86 {
+    mut last = array.last(bc.chain);
+    mut new_block = mine_block(last.index + 1, last.hash, payload, bc.difficulty);
+    mut new_chain = array.push(bc.chain, new_block);
+    return Blockchain86(new_chain, bc.difficulty);
+}
+
+fn blockchain_is_valid(bc: Blockchain86) -> bool {
+    mut k = 1;
+    while k < array.len(bc.chain) {
+        mut current = bc.chain[k];
+        mut previous = bc.chain[k - 1];
+        if current.prev_hash != previous.hash {
+            return false;
+        }
+        mut expected_hash = calculate_block_hash(current.index, current.prev_hash, current.data_payload, current.nonce);
+        if current.hash != expected_hash {
+            return false;
+        }
+        k = k + 1;
+    }
+    return true;
+}
+
+fn main() {
+    # Single character target prefix for rapid deterministic test
+    mut bc = blockchain_new("0");
+    bc = blockchain_add(bc, "Tx: Alice -> Bob 10 coins");
+    bc = blockchain_add(bc, "Tx: Bob -> Charlie 86 coins");
+    
+    mut valid = blockchain_is_valid(bc);
+    mut len = array.len(bc.chain);
+    
+    if valid and len == 3 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

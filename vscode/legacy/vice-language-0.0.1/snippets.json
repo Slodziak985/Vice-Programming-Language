@@ -1,0 +1,41 @@
+{
+  "Main Entry": {
+    "prefix": "main",
+    "body": [
+      "@entry",
+      "fn main() {",
+      "    $0",
+      "}"
+    ],
+    "description": "Główny punkt wejścia programu Vice"
+  },
+  "While Loop": {
+    "prefix": "whi",
+    "body": [
+      "while (${1:condition}) {",
+      "    $0",
+      "}"
+    ],
+    "description": "Pętla while"
+  },
+  "UI Create Window": {
+    "prefix": "uic",
+    "body": [
+      "mut win => ui.create(",
+      "    title => \"${1:Vice App}\",",
+      "    size => [${2:800}, ${3:600}],",
+      "    color => \"#${4:202020}\"",
+      ");"
+    ],
+    "description": "Tworzenie nowego okna UI"
+  },
+  "Data Structure": {
+    "prefix": "data",
+    "body": [
+      "data ${1:Name} {",
+      "    ${2:field}: ${3:type} => ${4:default};",
+      "}"
+    ],
+    "description": "Definicja struktury danych"
+  }
+}

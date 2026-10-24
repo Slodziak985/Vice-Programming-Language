@@ -1,0 +1,89 @@
+# Heavy Test 001: Relational DB Engine with Hash Index & Join 1
+data Row1 {
+    id: int,
+    user_id: int,
+    amount: float,
+    status: string
+}
+
+data UserRow1 {
+    id: int,
+    name: string,
+    role: string
+}
+
+data DatabaseEngine1 {
+    users: array,
+    orders: array,
+    user_index: map
+}
+
+fn db_new() -> DatabaseEngine1 {
+    return DatabaseEngine1([], [], {});
+}
+
+fn db_insert_user(db: DatabaseEngine1, user: UserRow1) -> DatabaseEngine1 {
+    mut users = array.push(db.users, user);
+    mut idx = map.set(db.user_index, string.from_int(user.id), user.name);
+    return DatabaseEngine1(users, db.orders, idx);
+}
+
+fn db_insert_order(db: DatabaseEngine1, order: Row1) -> DatabaseEngine1 {
+    mut orders = array.push(db.orders, order);
+    return DatabaseEngine1(db.users, orders, db.user_index);
+}
+
+fn db_join_orders_with_users(db: DatabaseEngine1) -> array {
+    mut joined = [];
+    for order in db.orders {
+        mut user_id_str = string.from_int(order.user_id);
+        if map.contains_key(db.user_index, user_id_str) {
+            mut user_name = map.get(db.user_index, user_id_str, "Unknown");
+            mut record = {
+                "order_id": order.id,
+                "user_name": user_name,
+                "amount": order.amount,
+                "status": order.status
+            };
+            joined = array.push(joined, record);
+        }
+    }
+    return joined;
+}
+
+fn db_aggregate_status(records: array, target_status: string) -> float {
+    mut total = 0.0;
+    for rec in records {
+        mut s = map.get(rec, "status", "");
+        if s == target_status {
+            mut amt = map.get(rec, "amount", 0.0);
+            total = total + amt;
+        }
+    }
+    return total;
+}
+
+fn main() {
+    mut db = db_new();
+    
+    # Insert users
+    db = db_insert_user(db, UserRow1(1, "Alice", "admin"));
+    db = db_insert_user(db, UserRow1(2, "Bob", "developer"));
+    db = db_insert_user(db, UserRow1(3, "Charlie", "tester"));
+    
+    # Insert orders
+    db = db_insert_order(db, Row1(101, 1, 101.0, "PAID"));
+    db = db_insert_order(db, Row1(102, 2, 251.0, "PENDING"));
+    db = db_insert_order(db, Row1(103, 1, 50.0, "PAID"));
+    db = db_insert_order(db, Row1(104, 3, 300.0, "PAID"));
+    
+    mut joined_records = db_join_orders_with_users(db);
+    mut paid_total = db_aggregate_status(joined_records, "PAID");
+    mut expected_paid = 151.0 + 300.0;
+    
+    if array.len(joined_records) == 4 and paid_total > expected_paid - 0.01 and paid_total < expected_paid + 0.01 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

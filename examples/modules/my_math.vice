@@ -1,0 +1,12 @@
+# Modular library for Vice testing
+
+fn calculate_hypotenuse(a: float, b: float) -> float {
+    mut sum_sq = (a * a) + (b * b);
+    return math.sqrt(sum_sq);
+}
+
+fn generate_secure_token(prefix: string, seed: string) -> string {
+    mut hashed = crypto.sha256(seed);
+    mut b64 = crypto.base64_encode(hashed);
+    return prefix + "_" + b64;
+}

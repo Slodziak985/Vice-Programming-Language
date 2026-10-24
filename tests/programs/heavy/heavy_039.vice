@@ -1,0 +1,64 @@
+# Heavy Test 039: In-Memory Virtual File System (VFS) 39
+data VfsNode39 {
+    id: int,
+    name: string,
+    is_dir: bool,
+    parent_id: int,
+    content: string
+}
+
+data VirtualFileSystem39 {
+    nodes: array,
+    next_id: int
+}
+
+fn vfs_new() -> VirtualFileSystem39 {
+    mut root = VfsNode39(0, "/", true, -1, "");
+    return VirtualFileSystem39([root], 1);
+}
+
+fn vfs_mkdir(vfs: VirtualFileSystem39, parent_id: int, name: string) -> VirtualFileSystem39 {
+    mut nid = vfs.next_id;
+    mut dir_node = VfsNode39(nid, name, true, parent_id, "");
+    mut nodes = array.push(vfs.nodes, dir_node);
+    return VirtualFileSystem39(nodes, nid + 1);
+}
+
+fn vfs_write_file(vfs: VirtualFileSystem39, parent_id: int, name: string, content: string) -> VirtualFileSystem39 {
+    mut nid = vfs.next_id;
+    mut file_node = VfsNode39(nid, name, false, parent_id, content);
+    mut nodes = array.push(vfs.nodes, file_node);
+    return VirtualFileSystem39(nodes, nid + 1);
+}
+
+fn vfs_read_file(vfs: VirtualFileSystem39, parent_id: int, name: string) -> string {
+    for node in vfs.nodes {
+        if node.parent_id == parent_id and node.name == name and !node.is_dir {
+            return node.content;
+        }
+    }
+    return "";
+}
+
+fn main() {
+    mut fs = vfs_new();
+    fs = vfs_mkdir(fs, 0, "etc");
+    fs = vfs_mkdir(fs, 0, "var");
+    
+    fs = vfs_write_file(fs, 1, "config.json", "{\"port\": 8080}");
+    fs = vfs_write_file(fs, 2, "log.txt", "system initialized for test_39");
+    
+    mut read_cfg = vfs_read_file(fs, 1, "config.json");
+    mut read_log = vfs_read_file(fs, 2, "log.txt");
+    mut read_missing = vfs_read_file(fs, 1, "secret.key");
+    
+    mut ok_cfg = (read_cfg == "{\"port\": 8080}");
+    mut ok_log = string.contains(read_log, "test_39");
+    mut ok_miss = (read_missing == "");
+    
+    if ok_cfg and ok_log and ok_miss and array.len(fs.nodes) == 5 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,41 @@
+fn module_test() -> bool {
+    let s => "hello world";
+    if (!string.contains(s, "world")) {
+        return false;
+    }
+    if (!string.starts_with(s, "hello")) {
+        return false;
+    }
+    
+    let split => string.split(s, " ");
+    if (split[0] != "hello" || split[1] != "world") {
+        return false;
+    }
+    
+    let joined => array.join(split, "-");
+    if (joined != "hello-world") {
+        return false;
+    }
+    
+    let upper => string.upper(joined);
+    if (upper != "HELLO-WORLD") {
+        return false;
+    }
+    
+    let l => len(upper);
+    if (l != 11) {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 10 (Modules)...";
+    let res => module_test();
+    if (res) {
+        output <- "Test 10 Passed!";
+    } else {
+        error() <- "Test 10 Failed!";
+    }
+}

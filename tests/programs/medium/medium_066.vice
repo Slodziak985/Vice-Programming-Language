@@ -1,0 +1,41 @@
+# Medium Test 066: Polygon Area via Shoelace Formula 66
+data Point2D66 {
+    x: float,
+    y: float
+}
+
+fn polygon_area(points: array) -> float {
+    mut n = array.len(points);
+    if n < 3 {
+        return 0.0;
+    }
+    mut area = 0.0;
+    mut j = n - 1;
+    mut i = 0;
+    while i < n {
+        mut p_i = points[i];
+        mut p_j = points[j];
+        area = area + ((p_j.x + p_i.x) * (p_j.y - p_i.y));
+        j = i;
+        i = i + 1;
+    }
+    return math.abs(area / 2.0);
+}
+
+fn main() {
+    # Rectangle of width 76 and height 5.0
+    mut pts = [
+        Point2D66(0.0, 0.0),
+        Point2D66(76.0, 0.0),
+        Point2D66(76.0, 5.0),
+        Point2D66(0.0, 5.0)
+    ];
+    mut a = polygon_area(pts);
+    mut expected = 380.0;
+    
+    if a > expected - 0.01 and a < expected + 0.01 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

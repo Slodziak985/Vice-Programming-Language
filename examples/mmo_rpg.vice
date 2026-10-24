@@ -1,0 +1,437 @@
+@autocheck
+
+data Player {
+    x: int => 0;
+    y: int => 0;
+    hp: int => 100;
+    max_hp: int => 100;
+    level: int => 1;
+    xp: int => 0;
+    gold: int => 0;
+    damage: int => 10;
+    color: string => "#00ccff";
+    size: int => 30;
+}
+
+data Enemy {
+    id: int => 0;
+    x: int => 0;
+    y: int => 0;
+    hp: int => 30;
+    max_hp: int => 30;
+    damage: int => 5;
+    color: string => "#ff3300";
+    size: int => 30;
+    active: bool => true;
+}
+
+// Usunieto strukture Tile, przechodzimy na generowanie proceduralne w locie!
+
+data GameState {
+    player: Player => Player();
+    enemies: Enemy[] => [];
+    // tiles: Tile[] usunięte z powodów optymalizacyjnych (FPS)!
+    game_width: int => 1200;
+    game_height: int => 800;
+    last_tick: int => 1;
+    last_enemy_attack: int => 1;
+    combat_log: string => "Welcome to Vice Online!";
+    screen_shake: int => 0;
+    kills: int => 0;
+}
+
+fn random_coord(max_val: int, segment_size: int, offset: int) -> int {
+    let current_time_ms: int => time.now_ms() + offset;
+    let num_segments: int => max_val / segment_size;
+    let div_result: int => current_time_ms / num_segments;
+    let floor_div_result: int => math.floor(div_result);
+    let rand_segment: int => current_time_ms - floor_div_result * num_segments;
+    let final_rand_segment: int => math.abs(rand_segment);
+    return final_rand_segment * segment_size;
+}
+
+fn get_tile_type(tx: int, ty: int) -> int {
+    if (tx <= 0 || tx >= 29 || ty <= 0 || ty >= 19) {
+        return 1; // Mur
+    }
+    let pseudo_rand: int => (tx * 17 + ty * 31);
+    let check1: int => pseudo_rand / 7;
+    let rem1: int => pseudo_rand - math.floor(check1) * 7;
+    
+    if (rem1 == 1) {
+        let check_tx: int => tx / 3;
+        let rem_tx: int => tx - math.floor(check_tx) * 3;
+        if (rem_tx == 0 && tx != 10 && ty != 10) { return 1; }
+    } else if (rem1 == 2) {
+        let check_ty: int => ty / 4;
+        let rem_ty: int => ty - math.floor(check_ty) * 4;
+        if (rem_ty == 0 && tx != 10 && ty != 10) { return 2; }
+    }
+    return 0; // Trawa
+}
+
+fn init_game_state() -> GameState {
+    let w: int => 1200;
+    let h: int => 800;
+
+    // Inicjalizacja Gracza
+    let initial_player: Player => Player(
+        x => 400,
+        y => 400,
+        hp => 100,
+        max_hp => 100,
+        level => 1,
+        xp => 0,
+        gold => 0,
+        damage => 15,
+        color => "#00ccff",
+        size => 30
+    );
+
+    // Generowanie Wrogow
+    let mut initial_enemies: Enemy[] => [];
+    let mut i: int => 0;
+    while (i < 15) {
+        let ex: int => random_coord(w - 100, 40, i * 13) + 40;
+        let ey: int => random_coord(h - 100, 40, i * 77) + 40;
+        let tx: int => ex / 40;
+        let ty: int => ey / 40;
+        if (get_tile_type(tx, ty) == 0) {
+            let dx: int => math.abs(ex - 400);
+            let dy: int => math.abs(ey - 400);
+            if (dx > 80 || dy > 80) {
+                initial_enemies.push(Enemy(
+                    id => i,
+                    x => ex + 5, // srodek kafelka
+                    y => ey + 5,
+                    hp => 40,
+                    max_hp => 40,
+                    damage => 5,
+                    color => "#ff3300",
+                    size => 30,
+                    active => true
+                ));
+                i = i + 1;
+            }
+        } else {
+            // Sprobuj inna pozycje dla wroga
+            i = i + 1;
+        }
+    }
+
+    return GameState(
+        player => initial_player,
+        enemies => initial_enemies,
+        game_width => w,
+        game_height => h,
+        last_tick => time.now_ms(),
+        last_enemy_attack => time.now_ms(),
+        combat_log => "Wkroczyles do swiata Vice!",
+        screen_shake => 0,
+        kills => 0
+    );
+}
+
+fn is_walkable(x: int, y: int, player_size: int) -> bool {
+    let left_tx: int => x / 40;
+    let right_tx: int => (x + player_size - 1) / 40;
+    let top_ty: int => y / 40;
+    let bottom_ty: int => (y + player_size - 1) / 40;
+    
+    if (get_tile_type(left_tx, top_ty) != 0) { return false; }
+    if (get_tile_type(right_tx, top_ty) != 0) { return false; }
+    if (get_tile_type(left_tx, bottom_ty) != 0) { return false; }
+    if (get_tile_type(right_tx, bottom_ty) != 0) { return false; }
+    
+    return true;
+}
+
+fn update_game_state(mut state: GameState, dir_x: int, dir_y: int) -> GameState {
+    let mut p: Player => state.player;
+    
+    // Ruch gracza (z kolizjami)
+    let speed: int => 8;
+    let new_x: int => p.x + dir_x * speed;
+    let new_y: int => p.y + dir_y * speed;
+    
+    if (is_walkable(new_x, p.y, p.size)) {
+        p.x = new_x;
+    }
+    if (is_walkable(p.x, new_y, p.size)) {
+        p.y = new_y;
+    }
+    
+    // Zapobiega wyjsciu za ekran (na wszelki wypadek)
+    if (p.x < 0) { p.x = 0; }
+    if (p.x > state.game_width - p.size) { p.x = state.game_width - p.size; }
+    if (p.y < 0) { p.y = 0; }
+    if (p.y > state.game_height - p.size) { p.y = state.game_height - p.size; }
+
+    state.player = p;
+
+    // AI Wrogow - podazanie za graczem
+    let mut updated_enemies: Enemy[] => [];
+    for e in state.enemies {
+        let mut en: Enemy => e;
+        if (en.active) {
+            let dx: int => p.x - en.x;
+            let dy: int => p.y - en.y;
+            let adx: int => math.abs(dx);
+            let ady: int => math.abs(dy);
+            
+            // Jesli gracz w poblizu, wrog idzie
+            if (adx < 300 && ady < 300) {
+                let e_speed: int => 3;
+                let mut move_x: int => 0;
+                let mut move_y: int => 0;
+                
+                if (adx > ady) {
+                    if (dx > 0) { move_x = e_speed; } else { move_x = -e_speed; }
+                } else {
+                    if (dy > 0) { move_y = e_speed; } else { move_y = -e_speed; }
+                }
+                
+                let en_new_x: int => en.x + move_x;
+                let en_new_y: int => en.y + move_y;
+                
+                if (is_walkable(en_new_x, en_new_y, en.size)) {
+                    en.x = en_new_x;
+                    en.y = en_new_y;
+                }
+            }
+        }
+        updated_enemies.push(en);
+    }
+    state.enemies = updated_enemies;
+
+    return state;
+}
+
+fn handle_combat(mut state: GameState, is_attacking: bool) -> GameState {
+    let mut p: Player => state.player;
+    let mut updated_enemies: Enemy[] => [];
+    let now: int => time.now_ms();
+    
+    let mut damage_taken: int => 0;
+
+    for e in state.enemies {
+        let mut en: Enemy => e;
+        if (en.active) {
+            let dx: int => math.abs(p.x - en.x);
+            let dy: int => math.abs(p.y - en.y);
+            let distance_sq: int => dx * dx + dy * dy;
+            
+            // Gracz bije wroga (zasieg 60)
+            if (is_attacking && distance_sq < 3600) {
+                en.hp = en.hp - p.damage;
+                state.combat_log = "Uderzasz wroga za 15 DMG!";
+                if (en.hp <= 0) {
+                    en.active = false;
+                    p.xp = p.xp + 20;
+                    p.gold = p.gold + 5;
+                    state.kills = state.kills + 1;
+                    state.combat_log = "Zabito wroga! +20 XP";
+                    
+                    // Level up
+                    if (p.xp >= p.level * 100) {
+                        p.level = p.level + 1;
+                        p.max_hp = p.max_hp + 20;
+                        p.hp = p.max_hp;
+                        p.damage = p.damage + 5;
+                        p.xp = 0;
+                        state.combat_log = "LEVEL UP! Zregenerowano HP.";
+                    }
+                }
+            }
+            
+            // Wrog bije gracza (zasieg 40)
+            if (en.active && distance_sq < 1600) {
+                if (now - state.last_enemy_attack > 1000) {
+                    damage_taken = damage_taken + en.damage;
+                }
+            }
+        }
+        updated_enemies.push(en);
+    }
+    
+    if (damage_taken > 0) {
+        p.hp = p.hp - damage_taken;
+        state.combat_log = "Otrzymano obrazenia!";
+        state.last_enemy_attack = now;
+        if (p.hp < 0) {
+            p.hp = 0;
+            state.combat_log = "ZGINELES! Graj od nowa :(";
+        }
+    }
+    
+    state.player = p;
+    state.enemies = updated_enemies;
+    return state;
+}
+
+fn draw_game_state(mut state: GameState) {
+    let offset_x: int => 0;
+    let offset_y: int => 0;
+
+    // Rysowanie tla na calej mapie jednym wywolaniem dla szybkosci!
+    ui.draw_rect(pos => [0 + offset_x, 0 + offset_y], size => [1200, 800], color => "#2d4a22");
+
+    // Rysowanie kafelkow proceduralnych (tylko mury i woda)
+    let mut tx: int => 0;
+    while (tx < 30) {
+        let mut ty: int => 0;
+        while (ty < 20) {
+            let t_type: int => get_tile_type(tx, ty);
+            if (t_type != 0) {
+                let mut color: string => "#444444";
+                if (t_type == 2) { color = "#2b7f94"; }
+                ui.draw_rect(
+                    pos => [tx * 40 + offset_x, ty * 40 + offset_y],
+                    size => [40, 40],
+                    color => color
+                );
+            }
+            ty = ty + 1;
+        }
+        tx = tx + 1;
+    }
+    
+    // Rysowanie wrogow
+    for e in state.enemies {
+        if (e.active) {
+            ui.draw_rect(
+                pos => [e.x + offset_x, e.y + offset_y],
+                size => [e.size, e.size],
+                color => e.color
+            );
+            
+            // Pasek HP wroga
+            let hp_width: int => (e.hp * e.size) / e.max_hp;
+            ui.draw_rect(
+                pos => [e.x + offset_x, e.y - 8 + offset_y],
+                size => [e.size, 5],
+                color => "#000000"
+            );
+            ui.draw_rect(
+                pos => [e.x + offset_x, e.y - 8 + offset_y],
+                size => [hp_width, 5],
+                color => "#ff0000"
+            );
+        }
+    }
+    
+    // Rysowanie gracza
+    let p: Player => state.player;
+    ui.draw_rect(
+        pos => [p.x + offset_x, p.y + offset_y],
+        size => [p.size, p.size],
+        color => p.color
+    );
+    
+    // Pasek z prawego brzegu - UI Panel
+    ui.draw_rect(
+        pos => [state.game_width - 250, 0],
+        size => [250, state.game_height],
+        color => "#1a1a24"
+    );
+    
+    // Informacje
+    ui.text(text => "VICE ONLINE", pos => [state.game_width - 230, 20], color => "#ffaa00");
+    ui.text(text => "Poziom: ", pos => [state.game_width - 230, 80], color => "#ffffff");
+    ui.text(text => "${p.level}", pos => [state.game_width - 150, 80], color => "#00ffff");
+    
+    ui.text(text => "HP: ", pos => [state.game_width - 230, 120], color => "#ffffff");
+    ui.text(text => "${p.hp}", pos => [state.game_width - 150, 120], color => "#ff4444");
+    
+    ui.text(text => "Zloto: ", pos => [state.game_width - 230, 160], color => "#ffffff");
+    ui.text(text => "${p.gold}", pos => [state.game_width - 150, 160], color => "#ffff00");
+    
+    ui.text(text => "XP: ", pos => [state.game_width - 230, 200], color => "#ffffff");
+    ui.text(text => "${p.xp}", pos => [state.game_width - 150, 200], color => "#88ff88");
+    
+    ui.text(text => "DMG: ", pos => [state.game_width - 230, 240], color => "#ffffff");
+    ui.text(text => "${p.damage}", pos => [state.game_width - 150, 240], color => "#ffaaaa");
+    
+    ui.text(text => "Zabojstwa: ", pos => [state.game_width - 230, 280], color => "#ffffff");
+    ui.text(text => "${state.kills}", pos => [state.game_width - 120, 280], color => "#ffffff");
+
+    ui.draw_rect(
+        pos => [state.game_width - 240, 320],
+        size => [230, 2],
+        color => "#555555"
+    );
+    
+    ui.text(text => "Dziennik Walki:", pos => [state.game_width - 230, 340], color => "#aaaaaa");
+    ui.text(text => state.combat_log, pos => [state.game_width - 230, 380], color => "#ffffff");
+    
+    // Przycisk akcji (Atak / Leczenie)
+    ui.button(id => "combat.attack", text => " [ SPACJA / ENTER ] Atak ", pos => [state.game_width - 230, 500], size => [200, 50], color => "#882222");
+    
+    if (p.hp == 0) {
+        ui.draw_rect(
+            pos => [0, 0],
+            size => [state.game_width, state.game_height],
+            color => "#aa000088"
+        );
+        ui.text(text => "KONIEC GRY!", pos => [state.game_width / 2 - 100, state.game_height / 2], color => "#ffffff");
+    }
+}
+
+@entry
+@intent("MMO_RPG_TEST")
+fn main() {
+    mut game: GameState => init_game_state();
+
+    mut win: Window => ui.window(
+        title => "Vice Online - The RPG MMO Limit Test",
+        size => [game.game_width, game.game_height],
+        color => "#000000"
+    );
+
+    let mut last_attack_time: int => time.now_ms();
+
+    while (ui.frame(win)) {
+        let mut dir_x: int => 0;
+        let mut dir_y: int => 0;
+
+        if (ui.is_key_pressed("ArrowUp")) { dir_y = -1; }
+        if (ui.is_key_pressed("ArrowDown")) { dir_y = 1; }
+        if (ui.is_key_pressed("ArrowLeft")) { dir_x = -1; }
+        if (ui.is_key_pressed("ArrowRight")) { dir_x = 1; }
+        
+        let now: int => time.now_ms();
+        if (now - game.last_tick > 30) {
+            game = update_game_state(game, dir_x, dir_y);
+            game.last_tick = now;
+        }
+        
+        // Attack logic (using ui.is_key_pressed mapping or button simulation)
+        // Since we don't have Space in standard win:key bindings natively exported,
+        // we'll simulate attack if player presess "UP" and "DOWN" at the same time,
+        // OR we can just add an auto-attack logic for enemies in range if "Z" is pressed...
+        // wait, we only have win:key_up, down, left, right in `interpreter.rs`.
+        // Let's implement an auto-attack if an enemy is close and we face them? No, let's just make
+        // bumping into enemies attack them (like classic rogue-likes).
+        let mut is_attacking: bool => false;
+        if ((dir_x != 0 || dir_y != 0) && now - last_attack_time > 300) {
+            // Check if player is bumping into an enemy
+            for e in game.enemies {
+                if (e.active) {
+                    let bump_x: int => game.player.x + dir_x * 12;
+                    let bump_y: int => game.player.y + dir_y * 12;
+                    let dx: int => math.abs(bump_x - e.x);
+                    let dy: int => math.abs(bump_y - e.y);
+                    if (dx < 35 && dy < 35) {
+                        is_attacking = true;
+                        last_attack_time = now;
+                        dir_x = 0; // Cancel movement
+                        dir_y = 0;
+                    }
+                }
+            }
+        }
+        
+        game = handle_combat(game, is_attacking);
+        draw_game_state(game);
+    }
+}

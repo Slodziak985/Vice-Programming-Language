@@ -1,0 +1,8 @@
+data MyStruct<T> {
+    valid: T => 0;
+    invalid: U => 0;
+}
+
+@entry
+fn main() {
+}

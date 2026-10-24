@@ -1,0 +1,22 @@
+# Medium Test 078: SQLite Aggregation and Transactions 78
+fn main() {
+    mut db = sqlite.open(":memory:");
+    sqlite.execute(db, "CREATE TABLE sales (id INTEGER PRIMARY KEY, product TEXT, qty INT, price REAL);", []);
+    
+    sqlite.execute(db, "INSERT INTO sales (product, qty, price) VALUES (?, ?, ?);", ["ItemA", 10 + 78, 25.0]);
+    sqlite.execute(db, "INSERT INTO sales (product, qty, price) VALUES (?, ?, ?);", ["ItemB", 5, 50.0]);
+    sqlite.execute(db, "INSERT INTO sales (product, qty, price) VALUES (?, ?, ?);", ["ItemC", 2, 100.0]);
+    
+    mut rows = sqlite.query(db, "SELECT SUM(qty) as total_qty, AVG(price) as avg_price FROM sales;", []);
+    sqlite.close(db);
+    
+    mut first_row = rows[0];
+    mut total_qty = map.get(first_row, "total_qty", 0);
+    mut expected_qty = 17 + 78;
+    
+    if total_qty == expected_qty {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,316 @@
+{
+	"Main Entry Point": {
+		"prefix": "entry",
+		"body": [
+			"@entry",
+			"fn main() {",
+			"\t$0",
+			"}"
+		],
+		"description": "Tworzy główną funkcję wejściową @entry fn main()"
+	},
+	"Autocheck Attribute": {
+		"prefix": "auto",
+		"body": [
+			"@autocheck"
+		],
+		"description": "Włącza automatyczną inferencję typów dla modułu lub funkcji"
+	},
+	"Low Level Attribute": {
+		"prefix": "low",
+		"body": [
+			"@lowlevel"
+		],
+		"description": "Ustawia tryb niskopoziomowy (np. dzielenie całkowitoliczbowe)"
+	},
+	"High Level Attribute": {
+		"prefix": "high",
+		"body": [
+			"@highlevel"
+		],
+		"description": "Ustawia tryb wysokopoziomowy (np. dzielenie zmiennoprzecinkowe)"
+	},
+	"Import Statement": {
+		"prefix": "imp",
+		"body": [
+			"import \"${1:module}.vice\";"
+		],
+		"description": "Importuje inny plik Vice"
+	},
+	"Function Definition": {
+		"prefix": "fn",
+		"body": [
+			"fn ${1:name}(${2:params})${3: -> ${4:int}} {",
+			"\t$0",
+			"}"
+		],
+		"description": "Definicja funkcji"
+	},
+	"Mutable Variable": {
+		"prefix": "mut",
+		"body": [
+			"mut ${1:name}${2:: ${3:int}} => ${4:value};",
+			"$0"
+		],
+		"description": "Definicja funkcji"
+	},
+	"Data Structure": {
+		"prefix": "data",
+		"body": [
+			"data ${1:Name} {",
+			"\t${2:field}: ${3:int} => ${4:0};$0",
+			"}"
+		],
+		"description": "Definicja struktury danych (data)"
+	},
+	"Data Field Definition": {
+		"prefix": "fld",
+		"body": [
+			"${1:name}: ${2:int} => ${3:0};$0"
+		],
+		"description": "Dodaje nową definicję pola do struktury data"
+	},
+	"Output Arrow": {
+		"prefix": "out",
+		"body": [
+			"output <- ${1:\"message\"};"
+		],
+		"description": "Wypisywanie danych (output <-)"
+	},
+	"Input Arrow": {
+		"prefix": "in",
+		"body": [
+			"input -> ${1:variable};"
+		],
+		"description": "Pobieranie danych (input ->)"
+	},
+	"If Statement": {
+		"prefix": "if",
+		"body": [
+			"if (${1:condition}) {",
+			"\t$0",
+			"}"
+		],
+		"description": "Instrukcja warunkowa if"
+	},
+	"If Else Statement": {
+		"prefix": "ife",
+		"body": [
+			"if (${1:condition}) {",
+			"\t$2",
+			"} else {",
+			"\t$0",
+			"}"
+		],
+		"description": "Instrukcja warunkowa if-else"
+	},
+	"Match Expression": {
+		"prefix": "match",
+		"body": [
+			"match ${1:variable} {",
+			"\t${2:pattern} => ${3:result},",
+			"\t_ => ${4:default}",
+			"}"
+		],
+		"description": "Wyrażenie dopasowania wzorca (match)"
+	},
+	"For Range": {
+		"prefix": "forr",
+		"body": [
+			"for ${1:i} in ${2:1}..${3:10} {",
+			"\t$0",
+			"}"
+		],
+		"description": "Pętla for w zakresie"
+	},
+	"For Each": {
+		"prefix": "fore",
+		"body": [
+			"for ${1:item} in ${2:collection}{",
+			"\t$0",
+			"}"
+		],
+		"description": "Iteracja po elementach tablicy"
+	},
+	"While Loop": {
+		"prefix": "while",
+		"body": [
+			"while (${1:condition}) {",
+			"\t$0",
+			"}"
+		],
+		"description": "Pętla while"
+	},
+	"Break": {
+		"prefix": "br",
+		"body": [
+			"break;"
+		],
+		"description": "Przerwanie pętli"
+	},
+	"Continue": {
+		"prefix": "co",
+		"body": [
+			"continue;"
+		],
+		"description": "Przejście do kolejnej iteracji"
+	},
+	"Return": {
+		"prefix": "ret",
+		"body": [
+			"return ${1:value};"
+		],
+		"description": "Zwrócenie wartości z funkcji"
+	},
+	"Property Check: Is Open": {
+		"prefix": "is_open",
+		"body": [
+			"${1:win} : is_open"
+		],
+		"description": "Sprawdza czy obiekt (np. okno) jest otwarty"
+	},
+	"Property Check: Is Pressed": {
+		"prefix": "is_pressed",
+		"body": [
+			"${1:btn} : is_pressed"
+		],
+		"description": "Sprawdza czy przycisk jest naciśnięty"
+	},
+	"Named Argument: Generic": {
+		"prefix": "arg",
+		"body": "${1:name} => ${2:value}",
+		"description": "Wstawia generyczny argument nazwany"
+	},
+	"Named Argument: Title": {
+		"prefix": "title",
+		"body": "title => \"${1:Vice App}\"",
+		"description": "Pole/Argument: tytuł"
+	},
+	"Named Argument: Size": {
+		"prefix": "size",
+		"body": "size => [${1:800}, ${2:600}]",
+		"description": "Pole/Argument: rozmiar [szer, wys]"
+	},
+	"Named Argument: Position": {
+		"prefix": "pos",
+		"body": "pos => [${1:0}, ${2:0}]",
+		"description": "Pole/Argument: pozycja [x, y]"
+	},
+	"Named Argument: Color": {
+		"prefix": "color",
+		"body": "color => \"${1:#ffffff}\"",
+		"description": "Pole/Argument: kolor (hex)"
+	},
+	"Named Argument: Text": {
+		"prefix": "text",
+		"body": "text => \"${1:content}\"",
+		"description": "Pole/Argument: tekst"
+	},
+	"Named Argument: Range": {
+		"prefix": "range",
+		"body": "range => [${1:0}, ${2:100}]",
+		"description": "Pole/Argument: zakres [min, max]"
+	},
+	"Named Argument: Placeholder": {
+		"prefix": "placeholder",
+		"body": "placeholder => \"${1:Wpisz...}\"",
+		"description": "Pole/Argument: placeholder tekstowy"
+	},
+	"UI Create Window": {
+		"prefix": "uic",
+		"body": [
+			"mut win => ui.create(",
+			"\ttitle => \"${1:Vice App}\",",
+			"\tsize => [${2:800}, ${3:600}],",
+			"\tcolor => \"${4:#202020}\"",
+			");"
+		],
+		"description": "Inicjalizacja okna UI"
+	},
+	"UI Rect": {
+		"prefix": "rect",
+		"body": [
+			"ui.rect(",
+			"\tpos => [${1:0}, ${2:0}],",
+			"\tsize => [${3:50}, ${4:50}],",
+			"\tcolor => \"${5:#00ff88}\"",
+			");"
+		],
+		"description": "Rysowanie prostokąta"
+	},
+	"UI Label": {
+		"prefix": "lab",
+		"body": [
+			"ui.label(text => \"${1:Hello}\", pos => [${2:10}, ${3:10}], color => \"${4:#ffffff}\");"
+		],
+		"description": "Wyświetlanie etykiety tekstowej"
+	},
+	"UI Button": {
+		"prefix": "btn",
+		"body": [
+			"mut ${1:btn} => ui.button(",
+			"\ttext => \"${2:Click Me}\",",
+			"\tpos => [${3:10}, ${4:10}],",
+			"\tsize => [${5:100}, ${6:40}],",
+			"\tcolor => \"${7:#444444}\"",
+			");"
+		],
+		"description": "Tworzenie przycisku"
+	},
+	"UI Checkbox": {
+		"prefix": "chk",
+		"body": [
+			"mut ${1:cb} => ui.checkbox(label => \"${2:Enable}\", pos => [${3:10}, ${4:10}]);"
+		],
+		"description": "Tworzenie checkboxa"
+	},
+	"UI Slider": {
+		"prefix": "sld",
+		"body": [
+			"mut ${1:s} => ui.slider(label => \"${2:Volume}\", pos => [${3:10}, ${4:10}], range => [${5:0}, ${6:100}]);"
+		],
+		"description": "Tworzenie suwaka (slider)"
+	},
+	"UI Text Input": {
+		"prefix": "txtin",
+		"body": [
+			"mut ${1:input} => ui.text_input(placeholder => \"${2:Enter text...}\", pos => [${3:10}, ${4:10}], size => [${5:200}, ${6:30}]);"
+		],
+		"description": "Pole wprowadzania tekstu"
+	},
+	"Time Now": {
+		"prefix": "now",
+		"body": [
+			"time.now_ms()"
+		],
+		"description": "Pobiera aktualny czas w milisekundach"
+	},
+	"Math Absolute": {
+		"prefix": "abs",
+		"body": [
+			"math.abs(${1:value})"
+		],
+		"description": "Wartość bezwzględna"
+	},
+	"String Split": {
+		"prefix": "split",
+		"body": [
+			"string.split(${1:text}, \"${2:,}\")"
+		],
+		"description": "Dzielenie tekstu"
+	},
+	"Array Join": {
+		"prefix": "join",
+		"body": [
+			"array.join(${1:list}, \"${2:-}\")"
+		],
+		"description": "Łączenie tablicy w tekst"
+	},
+	"Error Statement": {
+		"prefix": "err",
+		"body": [
+			"error(code => ${1:500}) <- \"${2:Something went wrong}\";"
+		],
+		"description": "Zgłoszenie błędu wykonania"
+	}
+}

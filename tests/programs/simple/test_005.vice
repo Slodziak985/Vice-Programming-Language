@@ -1,0 +1,15 @@
+# Test 005: While loop accumulator
+fn main() {
+    mut sum = 0;
+    mut i = 1;
+    while i <= 10 {
+        sum = sum + i;
+        i = i + 1;
+    }
+    # Sum of 1..10 is 55
+    if sum == 55 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

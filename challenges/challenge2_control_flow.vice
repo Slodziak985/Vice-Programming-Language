@@ -1,0 +1,42 @@
+data Player {
+    x: int => 200;
+    y: int => 200;
+    speed: int => 4;
+    color: string => "#00ff88";
+}
+
+@entry
+fn main() {
+    mut win => ui.create(
+        title => "Movement Demo",
+        size => [800, 600],
+        color => "#101010"
+    );
+
+    mut p => Player();
+
+    while (win : is_open) {
+
+        if (win : key_left) {
+            p.x = p.x - p.speed;
+        }
+
+        if (win : key_right) {
+            p.x = p.x + p.speed;
+        }
+
+        if (win : key_up) {
+            p.y = p.y - p.speed;
+        }
+
+        if (win : key_down) {
+            p.y = p.y + p.speed;
+        }
+
+        ui.rect(
+            pos => [p.x, p.y],
+            size => [50, 50],
+            color => p.color
+        );
+    }
+}

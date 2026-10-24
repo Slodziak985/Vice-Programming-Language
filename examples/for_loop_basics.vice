@@ -1,0 +1,16 @@
+@autocheck
+# Test petli zgodny ze skladnia Vice 0.0.7
+@entry
+fn main() {
+    mut suma => 0;
+
+    output <- "--- START PETLI ---";
+
+    for i in 1..5 {
+        output <- "Iteracja: " + i;
+        suma = suma + i;
+    }
+
+    output <- "--- WYNIK ---";
+    output <- "Suma liczb od 1 do 5: " + suma;
+}

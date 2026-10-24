@@ -1,0 +1,62 @@
+# Medium Test 047: Cellular Automaton Step 47
+fn count_neighbors(grid: array, r: int, c: int, size: int) -> int {
+    mut count = 0;
+    mut dr = -1;
+    while dr <= 1 {
+        mut dc = -1;
+        while dc <= 1 {
+            if !(dr == 0 and dc == 0) {
+                mut nr = r + dr;
+                mut nc = c + dc;
+                if nr >= 0 and nr < size and nc >= 0 and nc < size {
+                    mut idx = nr * size + nc;
+                    if grid[idx] == 1 {
+                        count = count + 1;
+                    }
+                }
+            }
+            dc = dc + 1;
+        }
+        dr = dr + 1;
+    }
+    return count;
+}
+
+fn step_automaton(grid: array, size: int) -> array {
+    mut next_grid = [];
+    mut r = 0;
+    while r < size {
+        mut c = 0;
+        while c < size {
+            mut idx = r * size + c;
+            mut neighbors = count_neighbors(grid, r, c, size);
+            mut alive = grid[idx];
+            mut next_state = 0;
+            if alive == 1 and (neighbors == 2 or neighbors == 3) {
+                next_state = 1;
+            } else if alive == 0 and neighbors == 3 {
+                next_state = 1;
+            }
+            next_grid = array.push(next_grid, next_state);
+            c = c + 1;
+        }
+        r = r + 1;
+    }
+    return next_grid;
+}
+
+fn main() {
+    # 3x3 Blinker pattern (horizontal to vertical)
+    mut grid = [
+        0, 0, 0,
+        1, 1, 1,
+        0, 0, 0
+    ];
+    mut next_g = step_automaton(grid, 3);
+    # Expected vertical blinker: center column has 1s
+    if next_g[1] == 1 and next_g[4] == 1 and next_g[7] == 1 and next_g[0] == 0 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

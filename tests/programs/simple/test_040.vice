@@ -1,0 +1,15 @@
+# Test 040: Logical assertions 40
+fn is_even(n: int) -> bool {
+    return (n % 2) == 0;
+}
+
+fn main() {
+    mut num = 40;
+    mut even = is_even(num);
+    mut check = (num % 2 == 0);
+    if even == check {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

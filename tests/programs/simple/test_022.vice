@@ -1,0 +1,15 @@
+# Test 022: Array filtering and transformation 22
+fn main() {
+    mut src = [22, 23, 24, 25, 26];
+    mut doubled = [];
+    for item in src {
+        doubled = array.push(doubled, item * 2);
+    }
+    mut first = array.first(doubled);
+    mut last = array.last(doubled);
+    if first == 44 and last == 52 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

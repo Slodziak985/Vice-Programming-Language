@@ -1,0 +1,42 @@
+# Medium Test 054: Reverse Polish Notation Calculator 54
+fn eval_rpn(tokens: array) -> int {
+    mut stack = [];
+    for tok in tokens {
+        if tok == "+" {
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a + b);
+        } else if tok == "-" {
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a - b);
+        } else if tok == "*" {
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a * b);
+        } else {
+            mut val = string.to_int(tok);
+            stack = array.push(stack, val);
+        }
+    }
+    return array.last(stack);
+}
+
+fn main() {
+    # (5 + 54) * 3 - 4
+    mut expr = ["5", "54", "+", "3", "*", "4", "-"];
+    mut res = eval_rpn(expr);
+    mut expected = (5 + 54) * 3 - 4;
+    
+    if res == expected {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,22 @@
+fn editor_project_empty(name: string) {
+    let source => "{\"version\":1,\"kind\":\"vice_editor_project\",\"name\":\"" + name + "\",\"scenes\":[],\"ui_layouts\":[],\"assets\":\"assets/assets.json\",\"last_open_scene\":\"scenes/main.vscene\"}";
+    return json.parse(source);
+}
+
+fn editor_load_project(path: string) {
+    return fs.read_json(path);
+}
+
+fn editor_save_project(path: string, project) -> bool {
+    return fs.write_json(path, project);
+}
+
+fn editor_ui_layout_empty(name: string) {
+    let source => "{\"version\":1,\"kind\":\"ui_layout\",\"name\":\"" + name + "\",\"windows\":[],\"elements\":[]}";
+    return json.parse(source);
+}
+
+fn editor_panel(id: string, title: string, x: int, y: int, width: int, height: int) {
+    let source => "{\"id\":\"" + id + "\",\"kind\":\"panel\",\"title\":\"" + title + "\",\"pos\":[" + to_str(x) + "," + to_str(y) + "],\"size\":[" + to_str(width) + "," + to_str(height) + "],\"children\":[]}";
+    return json.parse(source);
+}

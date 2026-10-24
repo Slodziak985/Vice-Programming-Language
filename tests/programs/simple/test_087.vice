@@ -1,0 +1,12 @@
+# Test 087: Regex validation 87
+fn main() {
+    mut text = "order_87_code_ABC";
+    mut ok1 = regex.is_match("order_\\d+_code_[A-Z]+", text);
+    mut ok2 = regex.is_match("^\\d+$", text);
+    mut rep = regex.replace("_code_ABC", text, "_DONE");
+    if ok1 and !ok2 and rep == "order_87_DONE" {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

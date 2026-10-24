@@ -1,0 +1,18 @@
+@entry
+fn main() {
+    mut score: int => 0;
+
+    output <- "Starting score:", score;
+
+    score = score + 10;
+    output <- "After bonus:", score;
+
+    score = score - 3;
+    output <- "After damage:", score;
+
+    if (score >= 10) {
+        output <- "Great score!";
+    } else {
+        output <- "Low score!";
+    }
+}

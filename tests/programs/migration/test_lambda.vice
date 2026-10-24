@@ -1,0 +1,8 @@
+@autocheck
+fn main() {
+    let f => |x: int| -> int => x * 2;
+    output <- f(5);
+    
+    let g => |y| => y + 10;
+    output <- g(5);
+}

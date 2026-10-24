@@ -1,0 +1,15 @@
+@entry
+fn main() {
+    let raw: string => "  Vice Core  ";
+    let clean: string => string.trim(raw);
+    let parts: string[] => string.split(clean, " ");
+    let joined: string => array.join(parts, "-");
+
+    output <- string.upper(joined);
+    output <- string.contains(clean, "Core");
+    output <- math.max(10, math.abs(-12));
+    output <- path.basename(path.join("examples", "stdlib_core.vice"));
+    output <- path.exists("examples/stdlib_core.vice");
+    output <- env.has("PATH");
+    output <- time.now_ms() > 0;
+}

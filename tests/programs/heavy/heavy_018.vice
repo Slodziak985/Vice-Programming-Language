@@ -1,0 +1,67 @@
+# Heavy Test 018: Web API Router & Middleware Stack 18
+data HttpRequestStub18 {
+    method: string,
+    path: string,
+    headers: map,
+    body: string
+}
+
+data HttpResponseStub18 {
+    status: int,
+    body: string
+}
+
+data Router18 {
+    routes: map,
+    middleware_count: int
+}
+
+fn router_new() -> Router18 {
+    return Router18({}, 0);
+}
+
+fn router_add(router: Router18, method: string, path: string, handler_id: string) -> Router18 {
+    mut key = method + ":" + path;
+    mut routes = map.set(router.routes, key, handler_id);
+    return Router18(routes, router.middleware_count);
+}
+
+fn router_dispatch(router: Router18, req: HttpRequestStub18) -> HttpResponseStub18 {
+    # Middleware 1: Auth check
+    if !map.contains_key(req.headers, "Authorization") {
+        return HttpResponseStub18(401, "{\"error\": \"Unauthorized\"}");
+    }
+    
+    # Routing
+    mut key = req.method + ":" + req.path;
+    if map.contains_key(router.routes, key) {
+        mut h = map.get(router.routes, key, "");
+        if h == "get_user" {
+            return HttpResponseStub18(200, "{\"user\": \"Alice_18\", \"role\": \"admin\"}");
+        } else if h == "create_item" {
+            return HttpResponseStub18(201, "{\"created\": true, \"id\": 1800}");
+        }
+    }
+    return HttpResponseStub18(404, "{\"error\": \"Not Found\"}");
+}
+
+fn main() {
+    mut r = router_new();
+    r = router_add(r, "GET", "/api/user", "get_user");
+    r = router_add(r, "POST", "/api/item", "create_item");
+    
+    mut req_ok = HttpRequestStub18("GET", "/api/user", {"Authorization": "Bearer secret"}, "");
+    mut res_ok = router_dispatch(r, req_ok);
+    
+    mut req_unauth = HttpRequestStub18("GET", "/api/user", {}, "");
+    mut res_unauth = router_dispatch(r, req_unauth);
+    
+    mut req_not_found = HttpRequestStub18("DELETE", "/api/unknown", {"Authorization": "Bearer secret"}, "");
+    mut res_not_found = router_dispatch(r, req_not_found);
+    
+    if res_ok.status == 200 and res_unauth.status == 401 and res_not_found.status == 404 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

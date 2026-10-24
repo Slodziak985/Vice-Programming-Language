@@ -1,0 +1,38 @@
+fn can_fail(should_fail: bool) -> Result<int, string> {
+    if (should_fail) {
+        return Result(is_ok => false, value => 0, error => "It failed!");
+    }
+    return Result(is_ok => true, value => 42, error => "");
+}
+
+fn try_operator_test() -> Result<int, string> {
+    let val => can_fail(false)?;
+    if (val != 42) {
+        return Result(is_ok => false, value => 0, error => "Wrong value");
+    }
+    return Result(is_ok => true, value => val, error => "");
+}
+
+fn error_handling_test() -> bool {
+    let res => try_operator_test();
+    if (!res.is_ok || res.value != 42) {
+        return false;
+    }
+    
+    let res2 => can_fail(true);
+    if (res2.is_ok || res2.error != "It failed!") {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 7 (Error Handling)...";
+    let res => error_handling_test();
+    if (res) {
+        output <- "Test 7 Passed!";
+    } else {
+        error() <- "Test 7 Failed!";
+    }
+}

@@ -1,0 +1,14 @@
+@entry
+@intent("UI_ROOT")
+fn main() {
+    mut win: Window => ui.window(
+        title => "Vice UI Rect",
+        size => [640, 360],
+        color => "#202020"
+    );
+
+    while (ui.frame(win)) {
+        ui.draw_rect(pos => [40, 40], size => [180, 90], color => "#00ff88");
+        ui.draw_rect(pos => [260, 120], size => [220, 140], color => "#4477ff");
+    }
+}

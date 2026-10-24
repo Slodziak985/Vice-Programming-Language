@@ -1,0 +1,47 @@
+trait Animal {
+    fn speak() -> string;
+}
+
+data Dog {
+    name: string => "";
+}
+
+impl Animal for Dog {
+    fn speak() -> string {
+        return "Woof";
+    }
+}
+
+data Cat {
+    name: string => "";
+}
+
+impl Animal for Cat {
+    fn speak() -> string {
+        return "Meow";
+    }
+}
+
+fn trait_test() -> bool {
+    let dog => Dog(name => "Rex");
+    let cat => Cat(name => "Whiskers");
+    
+    if (dog.speak() != "Woof") {
+        return false;
+    }
+    if (cat.speak() != "Meow") {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 9 (Traits & Impl)...";
+    let res => trait_test();
+    if (res) {
+        output <- "Test 9 Passed!";
+    } else {
+        error() <- "Test 9 Failed!";
+    }
+}

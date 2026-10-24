@@ -1,0 +1,16 @@
+@entry
+fn main() {
+    let res: Result<int, string> => ok(42);
+    let opt: Option<string> => some("hello");
+    
+    output <- "Result is ok: " + to_str(res.is_ok);
+    output <- "Option is some: " + to_str(opt.is_some);
+    
+    // Test the unwrap ! operator
+    let unwrapped_opt => opt!;
+    output <- "Unwrapped option: " + unwrapped_opt;
+    
+    // Test the try ? operator
+    let unwrapped_res => res?;
+    output <- "Unwrapped result: " + to_str(unwrapped_res);
+}

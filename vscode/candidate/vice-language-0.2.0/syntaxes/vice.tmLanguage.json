@@ -1,0 +1,109 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Vice",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#decorators"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.vice",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.line.number-sign.vice",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.vice",
+          "match": "\\b(if|else|while|for|in|return|break|continue|match|use)\\b"
+        },
+        {
+          "name": "keyword.declaration.vice",
+          "match": "\\b(fn|let|mut|data|enum|impl|trait)\\b"
+        },
+        {
+          "name": "keyword.other.vice",
+          "match": "\\b(emit|fail|output|input|error)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.vice",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.vice",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "support.type.vice",
+          "match": "\\b(int|string|float|bool|void|Result|Option|Error|Window|Button|Checkbox|Slider|TextInput|UiEvent)\\b"
+        },
+        {
+          "name": "constant.language.vice",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.vice",
+          "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.vice",
+          "match": "(<-|=>|\\?|\\!|\\+|-|\\*|/|%|==|!=|<|>|<=|>=|&&|\\|\\||=)"
+        }
+      ]
+    },
+    "decorators": {
+      "patterns": [
+        {
+          "name": "entity.name.function.decorator.vice",
+          "match": "@[a-zA-Z_][a-zA-Z0-9_]*"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.vice"
+}

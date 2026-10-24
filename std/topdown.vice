@@ -1,0 +1,57 @@
+use "game.vice";
+
+data TopdownInput {
+    x: float => 0.0;
+    y: float => 0.0;
+}
+
+data TopdownActor {
+    pos: GameVec2 => GameVec2();
+    size: GameVec2 => GameVec2();
+    speed: float => 220.0;
+    color: string => "#55ffff";
+}
+
+fn topdown_input() -> TopdownInput {
+    let mut x => 0.0;
+    let mut y => 0.0;
+    if (ui.is_key_pressed("ArrowLeft") || ui.is_key_pressed("KeyA")) {
+        x = 0.0 - 1.0;
+    }
+    if (ui.is_key_pressed("ArrowRight") || ui.is_key_pressed("KeyD")) {
+        x = 1.0;
+    }
+    if (ui.is_key_pressed("ArrowUp") || ui.is_key_pressed("KeyW")) {
+        y = 0.0 - 1.0;
+    }
+    if (ui.is_key_pressed("ArrowDown") || ui.is_key_pressed("KeyS")) {
+        y = 1.0;
+    }
+    mut controls => TopdownInput();
+    controls.x = x;
+    controls.y = y;
+    return controls;
+}
+
+fn topdown_actor(x: float, y: float) -> TopdownActor {
+    mut actor => TopdownActor();
+    actor.pos = game_vec2(x, y);
+    actor.size = game_vec2(32.0, 32.0);
+    actor.speed = 220.0;
+    actor.color = "#55ffff";
+    return actor;
+}
+
+fn topdown_update_actor(mut actor: TopdownActor, controls: TopdownInput, dt: float) -> TopdownActor {
+    actor.pos.x += controls.x * actor.speed * dt;
+    actor.pos.y += controls.y * actor.speed * dt;
+    return actor;
+}
+
+fn topdown_draw_actor(actor: TopdownActor, camera: GameCamera) {
+    game_draw_rect_world(
+        game_rect(actor.pos.x, actor.pos.y, actor.size.x, actor.size.y),
+        camera,
+        actor.color
+    );
+}

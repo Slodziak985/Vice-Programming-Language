@@ -1,0 +1,15 @@
+# Test 070: Logical assertions 70
+fn is_even(n: int) -> bool {
+    return (n % 2) == 0;
+}
+
+fn main() {
+    mut num = 70;
+    mut even = is_even(num);
+    mut check = (num % 2 == 0);
+    if even == check {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

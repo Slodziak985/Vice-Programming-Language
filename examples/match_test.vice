@@ -1,0 +1,36 @@
+@entry
+fn main() {
+  let n: int => 5;
+  output <- "Starting match tests";
+
+  let mut res: int => 0;
+  match n {
+    1 => { res = 10; }
+    2 => { res = 20; }
+    3 => { res = 20; }
+    4 => { res = 40; }
+    _ => { res = n * 100; }
+  }
+  output <- res;
+
+  match n {
+    1 => { output <- "one"; }
+    2 => { output <- "two or three"; }
+    3 => { output <- "two or three"; }
+    _ => { output <- "other"; }
+  }
+
+  let mut sum: int => 0;
+  for j in 1..5 {
+    if (j == 3) {
+      continue;
+    }
+    sum = sum + j;
+    if (j == 4) {
+      break;
+    }
+  }
+  output <- sum;
+
+  return;
+}

@@ -1,0 +1,4 @@
+@entry
+fn main() {
+    let res: Result<int> => ok(42);
+}

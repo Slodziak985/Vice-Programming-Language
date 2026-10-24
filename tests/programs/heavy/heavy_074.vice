@@ -1,0 +1,58 @@
+# Heavy Test 074: Stack Bytecode VM Simulation 74
+# Opcodes: 1: PUSH, 2: ADD, 3: SUB, 4: MUL, 5: HALT
+
+fn vm_run(bytecode: array) -> int {
+    mut stack = [];
+    mut ip = 0;
+    mut halted = false;
+    while !halted and ip < array.len(bytecode) {
+        mut op = bytecode[ip];
+        ip = ip + 1;
+        
+        if op == 1 {
+            # PUSH arg
+            mut arg = bytecode[ip];
+            ip = ip + 1;
+            stack = array.push(stack, arg);
+        } else if op == 2 {
+            # ADD
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a + b);
+        } else if op == 3 {
+            # SUB
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a - b);
+        } else if op == 4 {
+            # MUL
+            mut b = array.last(stack);
+            stack = array.pop(stack);
+            mut a = array.last(stack);
+            stack = array.pop(stack);
+            stack = array.push(stack, a * b);
+        } else if op == 5 {
+            # HALT
+            halted = true;
+        }
+    }
+    return array.last(stack);
+}
+
+fn main() {
+    # Program: PUSH 10, PUSH 74, ADD, PUSH 2, MUL, HALT
+    # Result: (10 + 74) * 2
+    mut code = [1, 10, 1, 74, 2, 1, 2, 4, 5];
+    mut result = vm_run(code);
+    mut expected = (10 + 74) * 2;
+    
+    if result == expected {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

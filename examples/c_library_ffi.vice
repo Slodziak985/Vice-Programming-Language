@@ -1,0 +1,24 @@
+# C-FFI Demonstration in Vice 0.2
+# Dynamic loading of native C libraries (C-ABI)
+
+fn main() {
+    output <- "--- Vice C-FFI Native Interop ---";
+
+    # Zaladowanie biblioteki systemowej Windows
+    mut lib = ffi.load("kernel32.dll");
+    output <- "Zaladowano biblioteke:";
+    output <- lib.path;
+
+    # Wywolanie funkcji C: DWORD GetCurrentProcessId()
+    # Sygnatura C: fn() -> i32
+    mut pid = ffi.call(lib, "GetCurrentProcessId", [], "i32");
+    output <- "Pobrany Process ID (PID) przez C-FFI:";
+    output <- pid;
+
+    # Zwolnienie biblioteki z pamieci
+    mut freed = ffi.free(lib);
+    output <- "Zwolniono zasob FFI:";
+    output <- freed;
+
+    output <- "FFI wykonane pomyslnie!";
+}

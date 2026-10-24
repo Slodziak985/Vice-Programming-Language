@@ -1,0 +1,43 @@
+@autocheck
+data Ball {
+    x: int => 100;
+    y: int => 100;
+    size: int => 50;
+    dx: int => 4;
+    dy: int => 3;
+    color: string => "#00ff88";
+}
+
+@entry
+fn main() {
+    let width => 800;
+    let height => 600;
+
+    mut win => ui.window(
+        title => "Vice Bouncing Box",
+        size => [width, height],
+        color => "#1a1a1a"
+    );
+
+    mut b => Ball();
+
+    while (ui.frame(win)) {
+        # Aktualizacja pozycji
+        b.x = b.x + b.dx;
+        b.y = b.y + b.dy;
+
+        # Kolizja z prawą/lewą ścianą
+        if (b.x + b.size > width || b.x < 0) {
+            b.dx = -b.dx;
+            b.color = "#ff3366"; # Zmiana koloru przy uderzeniu
+        }
+
+        # Kolizja z górą/dołem
+        if (b.y + b.size > height || b.y < 0) {
+            b.dy = -b.dy;
+            b.color = "#00ccff";
+        }
+
+        ui.draw_rect(pos => [b.x, b.y], size => [b.size, b.size], color => b.color);
+    }
+}

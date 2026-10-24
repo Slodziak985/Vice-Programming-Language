@@ -1,0 +1,11 @@
+{
+  "_type": "Level",
+  "name": "Level 1",
+  "entities": [
+    {
+      "_type": "Player",
+      "x": 100,
+      "y": 200
+    }
+  ]
+}

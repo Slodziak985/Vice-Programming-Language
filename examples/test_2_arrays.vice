@@ -1,0 +1,41 @@
+fn array_test() -> bool {
+    let mut arr => [1, 2, 3, 4, 5];
+    
+    if (arr[0] != 1 || arr[4] != 5) {
+        return false;
+    }
+    
+    arr.push(6);
+    if (arr[5] != 6) {
+        return false;
+    }
+    
+    arr[0] = 100;
+    if (arr[0] != 100) {
+        return false;
+    }
+    
+    let mut sum => 0;
+    for x in arr {
+        sum = sum + x;
+    }
+    
+    # 100 + 2 + 3 + 4 + 5 + 6 = 120
+    if (sum != 120) {
+        return false;
+    }
+    
+    let empty_arr: int[] => [];
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 2 (Arrays)...";
+    let res => array_test();
+    if (res) {
+        output <- "Test 2 Passed!";
+    } else {
+        error() <- "Test 2 Failed!";
+    }
+}

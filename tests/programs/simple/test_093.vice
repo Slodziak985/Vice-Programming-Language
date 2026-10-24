@@ -1,0 +1,12 @@
+# Test 093: String transformations 93
+fn main() {
+    mut s = "vice_test_case_093";
+    mut upper = string.to_upper(s);
+    mut has_sub = string.contains(upper, "TEST");
+    mut l = string.len(upper);
+    if has_sub and l > 10 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

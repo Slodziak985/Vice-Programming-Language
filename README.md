@@ -1,0 +1,205 @@
+﻿# đźŚŚ Vice Programming Language (v0.2.0 â€” Final Release)
+
+[![Status](https://img.shields.io/badge/Status-Project%20Completed%20%2F%20Archived-success.svg)](https://github.com/Slodziak985/Vice-Programming-Language)
+[![Version](https://img.shields.io/badge/Version-0.2.0--stable-blue.svg)](https://github.com/Slodziak985/Vice-Programming-Language)
+[![Rust](https://img.shields.io/badge/Language-Rust%202021-red.svg)](https://www.rust-lang.org/)
+[![Architecture](https://img.shields.io/badge/Architecture-Bytecode%20VM-orange.svg)](https://github.com/Slodziak985/Vice-Programming-Language)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+> *"Code should make it dead obvious where data comes from, how it transforms, and where it goes. No hidden magic, no unexpected side effects."*  
+> â€” **Slodziak985**
+
+---
+
+## đź’¬ A Note from the Creator
+
+After **nearly two years of continuous work, learning, and heavy collaboration with AI**, Vice has officially reached version **0.2.0 â€” and is now completed**.
+
+Building a programming language from scratch in Rust was one of the most intense and rewarding challenges I've ever taken on. From hand-crafting the lexer, parser, and semantic analyzer, to throwing away an entire tree-walking interpreter to build a bytecode compiler and stack VM from the ground up â€” this project pushed my engineering skills further than anything else before.
+
+Throughout these two years, I used modern AI models as an active pair programmer. AI helped me brainstorm syntax, untangle gnarly Rust lifetime issues, write exhaustive test matrices, and sanity-check architectural choices. But every design decision, every rewrite, and the final vision behind Vice was guided by my own hands and determination.
+
+With v0.2.0 stable, tested by over 50 automated test suites, and packaged with a native Windows installer and CLI tools, **I am officially closing active development and archiving this project as feature-complete**.
+
+---
+
+## đźŽŻ What is Vice?
+
+Vice is an imperative, statically-checked programming language designed around **explicit data flow**, **value semantics**, and **predictable execution**. It compiles source code to custom bytecode and executes it inside an isolated, verifiable stack-based Virtual Machine written in Rust.
+
+### Key Highlights
+
+- **The Three Arrows Concept**:
+  - `let x => 42;` â€” binding and variable declaration
+  - `emit <- value;` â€” output / stream emission
+  - `input -> buffer;` / `fn test() -> int` â€” directional inputs and return types
+- **Value Semantics**: Arrays and custom `data` structs behave with value semantics (pass-by-value / immutable updates). Changing a structure doesn't cause mysterious side effects elsewhere in your program.
+- **Built-in `matrix` Module**: NumPy-inspired 2D matrix operations built directly into the standard runtime (matrix multiplication, transposition, reshape, element-wise math). You can write neural network layers without pulling in third-party libraries.
+- **Bytecode Verifier**: Before bytecode runs, an internal verifier checks chunk invariants, jump targets, and stack frames to prevent undefined runtime behavior.
+- **All-in-One CLI**: Built-in test runner (`vice test`), code formatter (`vice fmt`), type/pipeline checker (`vice check`), and project scaffolding (`vice new`).
+- **Native Ecosystem**: Optional windowing & graphics via `wgpu`, audio playback via `rodio`, embedded relational storage via `sqlite`, C-ABI dynamic loading via `ffi`, and cryptographic hashing (`crypto`).
+
+---
+
+## âŹł The 2-Year Journey
+
+```mermaid
+flowchart TD
+    A["Early 2024: The Spark"] -->|AST Tree-Walking Interpreter| B["Vice 0.1.x Prototype"]
+    B -->|Performance & Scalability Limits| C["The Big Rewrite"]
+    C -->|Pair-programming with AI & Rust 2021| D["Custom Bytecode VM + Verifier"]
+    D -->|Adding native matrix, sqlite, ffi, crypto| E["Vice 0.2.0 Architecture"]
+    E -->|CLI Tools + egui GUI Installer + 50+ Test Suites| F["Final Release v0.2.0"]
+    F --> G["Project Complete & Archived (October 2026)"]
+```
+
+1. **Year 1 â€” Prototyping and the Tree-Walking Interpreter (v0.1.x)**:  
+   Started with a simple dream: a language with clean visual arrows. The first iteration ran on a dynamic tree-walking AST interpreter with `@mount` imports. While fun, it was slow, hard to optimize, and difficult to type-check strictly.
+2. **The Turning Point**:  
+   Rather than patching a slow engine, I scrapped the old runtime entirely and started a clean-slate rewrite in Rust, moving to a compiled bytecode VM.
+3. **Year 2 â€” Stabilization, VM, and Tooling (v0.2.0)**:  
+   With AI as a tireless copilot, I built a multi-stage pipeline: Source Loader with cycle detection $\to$ Lexer with precise spans $\to$ AST Parser $\to$ Semantic Analyzer (traits, loop termination, type checking) $\to$ Bytecode Compiler $\to$ Bytecode Verifier $\to$ Stack VM.
+4. **Completion**:  
+   Added `vice.toml` project manifests, built a native Windows installer in `egui`, hooked up `wgpu` rendering, and passed 51 comprehensive integration test suites. The language is solid, reliable, and ready to stand on its own.
+
+---
+
+## đź’» Code Showcase
+
+### 1. Hello World & Explicit Output
+```vice
+use "std/io.vice";
+
+@entry
+fn main() {
+    let message => "Hello from Vice 0.2.0!";
+    emit <- message;
+}
+```
+
+### 2. Forward-Pass Neural Layer (Matrix Math)
+Vice makes linear algebra simple right out of the box:
+```vice
+# Simple neural layer: Y = W * X
+fn main() {
+    emit <- "--- Neural Layer Forward Pass ---";
+
+    # Weights matrix: 2 neurons, 3 inputs (2x3)
+    mut weights_data = [0.5, -0.2, 0.8, 0.1, 0.9, -0.4];
+    mut W = matrix.from_array(weights_data, 2, 3);
+
+    # Input vector: 3 features (3x1 column vector)
+    mut inputs_data = [1.0, 2.0, 0.5];
+    mut X = matrix.from_array(inputs_data, 3, 1);
+
+    # Matrix multiplication: Y = W * X (result: 2x1)
+    mut Y = matrix.mul(W, X);
+    emit <- "Neuron Outputs:";
+    emit <- matrix.to_array(Y);
+
+    # Sum of all weights
+    let total => matrix.sum(W);
+    emit <- total;
+}
+```
+
+### 3. Data Structures and Pattern Matching
+```vice
+data Point {
+    x: int => 0;
+    y: int => 0;
+}
+
+enum State {
+    Active,
+    Idle,
+    Failed(string)
+}
+
+fn describe(state: State) -> string {
+    return match (state) {
+        State.Active => "Running smoothly.",
+        State.Idle => "Waiting for input.",
+        State.Failed(err) => err,
+        _ => "Unknown state."
+    };
+}
+```
+
+### 4. Built-in Testing
+```vice
+@test
+fn verify_basic_math() {
+    let a => 15;
+    let b => 27;
+    if (a + b != 42) {
+        fail <- "Arithmetic invariant broken!";
+    }
+}
+```
+
+---
+
+## đź› ď¸Ź CLI Quick Reference
+
+All developer workflows run through the single `vice` executable:
+
+| Command | Description |
+|---|---|
+| `vice run <file\|.>` | Compiles source code to bytecode and executes it immediately in VM |
+| `vice check <file\|.>` | Validates syntax, types, and semantics without running the code |
+| `vice test <.>` | Finds and runs all functions marked with `@test` |
+| `vice fmt <file\|.>` | Recursively formats code according to the canonical 4-space style |
+| `vice schema` | Emits a complete machine-readable JSON schema of all available APIs |
+| `vice new <name>` | Scaffolds a new project with a standard `vice.toml` manifest |
+| `vice migrate` | Automatically converts legacy v0.1.1 code into modern v0.2.0 syntax |
+
+---
+
+## đź“¦ Download & Installation
+
+Pre-built binaries for **Windows x86-64** are available in the [GitHub Releases](https://github.com/Slodziak985/Vice-Programming-Language/releases) tab:
+
+- **`ViceInstaller.exe`**: Native GUI installer. Just double-click to install Vice and add it to your system PATH.
+- **`vice.exe`**: Portable, standalone CLI compiler and VM executable.
+- **`Vice_v0.2.0_Windows_x64.zip`**: Complete portable bundle (includes CLI, installer, standard library `std\`, and code examples).
+
+### Building from Source (Requires Rust 1.75+)
+```bash
+# Clone the repository
+git clone https://github.com/Slodziak985/Vice-Programming-Language.git
+cd Vice
+
+# Build the standalone compiler and VM
+cargo build --release --features desktop --bin vice
+
+# Run tests
+cargo test
+
+# Check installation
+./target/release/vice --version
+```
+
+---
+
+## đź“š Documentation
+
+- **[Architecture & Runtime Specification](docs/ARCHITECTURE.md)** â€” In-depth breakdown of the Loader, Lexer, Parser, AST, Semantic Analyzer, Bytecode Compiler, Verifier, and Stack VM.
+- **[Developer Guide](docs/DEVELOPER_GUIDE.md)** â€” Guide to writing Vice code, working with the `matrix` module, and running tests.
+- **[Final Announcement & Community Thanks](docs/ANNOUNCEMENT.md)** â€” The story of the project, closure notes, and credits.
+- **[Polska Dokumentacja (Polish Guides)](docs/pl/)** â€” Oryginalne, szczegĂłĹ‚owe podrÄ™czniki po polsku dla developerĂłw, studentĂłw i modeli AI.
+
+---
+
+## đźŹ Final Words & Legacy
+
+Vice was never about replacing Python or Rust. It was about proving to myself that a solo developer, powered by stubborn curiosity, passion for systems engineering, and the leverage of modern AI, could design and build a full language from first principles.
+
+This repository will stay public as an open-source archive and learning resource for anyone interested in how lexers, parsers, bytecode compilers, and virtual machines fit together in Rust.
+
+Thank you to everyone who tested early builds, broke my VM in creative ways, and cheered this project on.
+
+**Slodziak985**  
+*Creator & Lead Architect of Vice*  
+October 2026
+

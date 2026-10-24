@@ -1,0 +1,12 @@
+# Test 003: String concatenation and length
+fn main() {
+    mut s1 = "Hello, ";
+    mut s2 = "Vice!";
+    mut full = s1 + s2;
+    mut l = string.len(full);
+    if full == "Hello, Vice!" and l == 12 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

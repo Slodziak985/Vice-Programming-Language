@@ -1,0 +1,39 @@
+# Medium Test 045: 0/1 Knapsack Dynamic Programming 45
+fn knapsack(capacity: int, weights: array, values: array, n: int) -> int {
+    mut dp = [];
+    mut w = 0;
+    while w <= capacity {
+        dp = array.push(dp, 0);
+        w = w + 1;
+    }
+    
+    mut i = 0;
+    while i < n {
+        mut item_w = weights[i];
+        mut item_v = values[i];
+        mut cap = capacity;
+        while cap >= item_w {
+            mut candidate = dp[cap - item_w] + item_v;
+            if candidate > dp[cap] {
+                dp[cap] = candidate;
+            }
+            cap = cap - 1;
+        }
+        i = i + 1;
+    }
+    return dp[capacity];
+}
+
+fn main() {
+    mut weights = [2, 3, 4, 5];
+    mut values = [3, 4, 5, 8 + 45];
+    mut cap = 5;
+    mut max_val = knapsack(cap, weights, values, 4);
+    
+    # Best for cap 5: either item 4 (w=5, v=8+i) or item 1+2 (w=2+3=5, v=3+4=7)
+    if max_val >= 8 + 45 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

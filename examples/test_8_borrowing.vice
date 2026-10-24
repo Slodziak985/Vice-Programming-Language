@@ -1,0 +1,44 @@
+fn modify_array(arr: &mut int[]) {
+    arr.push(99);
+}
+
+fn borrowing_test() -> bool {
+    let mut my_arr => [1, 2, 3];
+    let shared => &my_arr;
+    
+    shared.push(4);
+    if (my_arr[3] != 4) {
+        return false;
+    }
+    
+    modify_array(shared);
+    if (my_arr[4] != 99) {
+        return false;
+    }
+    
+    let mut num => 10;
+    let num_ref => &num;
+    *num_ref = 20;
+    
+    if (num != 20) {
+        return false;
+    }
+    
+    let mut nested => [[1, 2], [3, 4]];
+    let nested_ref => &nested;
+    let first => &nested_ref[0];
+    # Nie wspieramy jeszcze pożyczania pól/indeksów bezpośrednio, 
+    # to test weryfikuje tylko podstawowe zachowanie.
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 8 (Borrowing & ARC)...";
+    let res => borrowing_test();
+    if (res) {
+        output <- "Test 8 Passed!";
+    } else {
+        error() <- "Test 8 Failed!";
+    }
+}

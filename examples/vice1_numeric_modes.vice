@@ -1,0 +1,25 @@
+@highlevel
+fn precise_divide(a: int, b: int) -> float {
+    return a / b;
+}
+
+@lowlevel
+fn truncate_to_int(value: float) -> int {
+    let packed: int => value;
+    return packed;
+}
+
+@autocheck
+fn inferred_score(seed: int) -> int {
+    let doubled => seed * 2;
+    let bonus => len([1, 2, 3]);
+    return doubled + bonus;
+}
+
+@entry
+fn main() {
+    output <- "precise", precise_divide(5, 2);
+    output <- "packed", truncate_to_int(7.9);
+    output <- "inferred", inferred_score(9);
+    output <- "casts", to_int(3.8), to_float(4), to_num("12.5");
+}

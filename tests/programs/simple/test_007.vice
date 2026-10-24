@@ -1,0 +1,12 @@
+# Test 007: Map insertion and lookup
+fn main() {
+    mut m = {"k1": 100, "k2": 200};
+    mut v1 = map.get(m, "k1", 0);
+    mut v2 = map.get(m, "k2", 0);
+    mut v3 = map.get(m, "k3", -1);
+    if v1 == 100 and v2 == 200 and v3 == -1 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

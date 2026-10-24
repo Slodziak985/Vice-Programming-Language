@@ -1,0 +1,12 @@
+# Test 001: Basic arithmetic and precedence
+fn main() {
+    mut a = 10;
+    mut b = 25;
+    mut c = a + b * 2 - (15 / 3);
+    # 10 + 50 - 5 = 55
+    if c == 55 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

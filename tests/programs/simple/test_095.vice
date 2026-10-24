@@ -1,0 +1,12 @@
+# Test 095: Crypto SHA256 integrity check 95
+fn main() {
+    mut h = crypto.sha256("vice_input_data_95");
+    mut l = string.len(h);
+    mut b64 = crypto.base64_encode("test_95");
+    mut decoded = crypto.base64_decode(b64);
+    if l == 64 and decoded == "test_95" {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

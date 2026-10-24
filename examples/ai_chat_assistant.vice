@@ -1,0 +1,33 @@
+# AI Chat Assistant Integration in Vice 0.2
+# Demonstrates HTTP POST request with headers and JSON handling
+
+fn main() {
+    output <- "--- Vice AI Assistant Client ---";
+
+    # Adres lokalnego lub zdalnego serwera modeli AI (np. Ollama / serwer zgodny z OpenAI)
+    mut endpoint = "https://httpbin.org/post";
+
+    # Przygotowanie zapytania JSON w formacie promptu dla AI
+    mut request_body = "{\"model\": \"vice-ai-v1\", \"messages\": [{\"role\": \"user\", \"content\": \"Witaj Vice! Opowiedz o swoich mozliwosciach.\"}]}";
+    output <- "Wysylanie zapytania do endpointu:";
+    output <- endpoint;
+
+    # Naglowki HTTP (autoryzacja i user-agent w mapie Vice)
+    mut headers = {
+        "Authorization": "Bearer vice-token-sample",
+        "User-Agent": "ViceRuntime/0.2.0"
+    };
+
+    # Wykonanie zapytania POST przez natywny modul http
+    mut response = http.post(endpoint, request_body, headers);
+    output <- "Status odpowiedzi serwera:";
+    output <- response.status;
+    output <- "Czy zadanie zakonczone sukcesem (ok):";
+    output <- response.ok;
+
+    if response.ok {
+        output <- "Odpowiedz serwera odebrana pomyslnie!";
+    } else {
+        output <- "Blad polaczenia z API!";
+    }
+}

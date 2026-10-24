@@ -1,0 +1,20 @@
+# Test 088: Custom data structure 88
+data Box88 {
+    width: int,
+    height: int,
+    depth: int
+}
+
+fn volume(b: Box88) -> int {
+    return b.width * b.height * b.depth;
+}
+
+fn main() {
+    mut b = Box88(10, 3, 4);
+    mut v = volume(b);
+    if v == 120 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

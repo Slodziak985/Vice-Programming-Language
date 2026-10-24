@@ -1,0 +1,21 @@
+fn tilemap_empty(width: int, height: int, tile_width: int, tile_height: int) {
+    let source => "{\"version\":1,\"kind\":\"tilemap\",\"width\":" + to_str(width) + ",\"height\":" + to_str(height) + ",\"tile_width\":" + to_str(tile_width) + ",\"tile_height\":" + to_str(tile_height) + ",\"tilesets\":[],\"layers\":[]}";
+    return json.parse(source);
+}
+
+fn tilemap_layer(id: string, name: string, width: int, height: int) {
+    let source => "{\"id\":\"" + id + "\",\"name\":\"" + name + "\",\"width\":" + to_str(width) + ",\"height\":" + to_str(height) + ",\"visible\":true,\"tiles\":[]}";
+    return json.parse(source);
+}
+
+fn tilemap_load(path: string) {
+    return fs.read_json(path);
+}
+
+fn tilemap_save(path: string, tilemap) -> bool {
+    return fs.write_json(path, tilemap);
+}
+
+fn tilemap_draw(tilemap, camera) -> bool {
+    return game2d.tilemap(tilemap, camera);
+}

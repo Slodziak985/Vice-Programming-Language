@@ -1,0 +1,82 @@
+@autocheck
+# ==========================================
+# Vice Language Full Feature Test Suite
+# Roadmap Version: 1.0.0 (Foundations)
+# ==========================================
+
+fn helper_func(val) {
+    output <- "[Helper] Received value:", val;
+}
+
+@entry
+fn main() {
+    output <- "--- Section 1: Basic Variables & Math ---";
+    let a => 10;
+    mut b : int => 20;
+    b += a;
+    let result => (a * 2) + (b / 2);
+    output <- "Math Test: (10*2) + (30/2) =", result; # Expected: 35
+
+    output <- "";
+    output <- "--- Section 2: Strings & Concatenation ---";
+    let greeting => "Hello, ";
+    let name => "Vice Developer";
+    output <- greeting + name;
+    output <- "Multi-value output check:", "Part A", 123, true;
+
+    output <- "";
+    output <- "--- Section 3: Arrays & Indexing ---";
+    let list => [10, 20, 30, 40];
+    output <- "Array:", list;
+    output <- "Index 1 (expected 20):", list[1];
+
+    output <- "";
+    output <- "--- Section 4: Control Flow (If/Else) ---";
+    let condition => a < b;
+    if (condition) {
+        output <- "Condition Met: a is less than b";
+    } else {
+        output <- "Error: If logic failed";
+    }
+
+    output <- "";
+    output <- "--- Section 5: Loops (While/For) ---";
+    mut count => 3;
+    while (count > 0) {
+        output <- "While Countdown:", count;
+        count -= 1;
+    }
+
+    for i in 1..3 {
+        output <- "For Loop Iteration:", i;
+    }
+
+    output <- "";
+    output <- "--- Section 6: Data Structures (The New Foundation) ---";
+    
+    # Define the structure
+    data Player {
+        id      : int    => 1;
+        name    : string => "New Player";
+        isAdmin : bool   => false;
+    }
+
+    # Instantiate the data structure
+    mut p1 => Player();
+    
+    # Test member access (Dot Operator)
+    output <- "Player Default Name:", p1.name;
+    output <- "Player Default ID:", p1.id;
+
+    output <- "";
+    output <- "--- Section 7: Type Conversions & Functions ---";
+    let numeric_string => "42";
+    let converted => to_num(numeric_string);
+    output <- "Conversion test:", to_str(converted + 8); # Expected: 50
+
+    helper_func("Testing complete");
+
+    output <- "";
+    output <- "--- Test Suite Execution Finished ---";
+    output <- "Status: OK";
+}

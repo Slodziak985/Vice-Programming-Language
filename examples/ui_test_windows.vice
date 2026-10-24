@@ -1,0 +1,66 @@
+@autocheck
+@entry
+fn main() {
+    # Inicjalizacja stanu aplikacji
+    mut counter: int => 0;
+    mut box_x: float => 375.0;
+    mut box_y: float => 275.0;
+    let speed: float => 4.0;
+
+    # Tworzymy okno główne
+    # ui.window zwraca instancję Window
+    mut win => ui.window(
+        title => "Vice Engine v0.0.5 - Windows UI Test",
+        size => [800, 600],
+        color => "#121212"
+    );
+
+    output <- "Uruchomiono test UI. Czekam na interakcję...";
+
+    # Główna pętla aplikacji
+    while (ui.frame(win)) {
+        # 1. Nagłówek i tło paska stanu
+        ui.draw_rect(pos => [0, 0], size => [800, 60], color => "#1f1f1f");
+        ui.text(text => "VICE ENGINE TEST SUITE", pos => [20, 22], color => "#00ff88");
+        ui.text(text => "Klikniecia: " + to_str(counter), pos => [650, 22], color => "#ffffff");
+
+        # 2. Przyciski interaktywne
+        # Przycisk zwiększający licznik
+        mut btn_plus => ui.button(id => "counter.plus", text => "DODAJ", pos => [50, 80], size => [120, 40], color => "#2ecc71");
+        if (btn_plus.clicked) {
+            counter = counter + 1;
+        }
+
+        # Przycisk zmniejszający licznik
+        mut btn_minus => ui.button(id => "counter.minus", text => "ODEJMIJ", pos => [180, 80], size => [120, 40], color => "#e74c3c");
+        if (btn_minus.clicked) {
+            counter = counter - 1;
+        }
+
+        # 3. Test sterowania klawiaturą (PropertyCheck)
+        if (ui.is_key_pressed("ArrowUp")) {
+            box_y = box_y - speed;
+        }
+        if (ui.is_key_pressed("ArrowDown")) {
+            box_y = box_y + speed;
+        }
+        if (ui.is_key_pressed("ArrowLeft")) {
+            box_x = box_x - speed;
+        }
+        if (ui.is_key_pressed("ArrowRight")) {
+            box_x = box_x + speed;
+        }
+
+        # Rysujemy ruchomy kwadrat (używamy to_int, bo rect oczekuje liczb całkowitych)
+        ui.draw_rect(
+            pos => [to_int(box_x), to_int(box_y)],
+            size => [50, 50],
+            color => "#3498db"
+        );
+
+        # 4. Instrukcja na dole ekranu
+        ui.text(text => "Uzyj WASD lub strzalek, aby poruszac niebieskim kwadratem", pos => [50, 550], color => "#7f8c8d");
+    }
+
+    output <- "Okno zostalo zamkniete. Koncowy wynik licznika: ", counter;
+}

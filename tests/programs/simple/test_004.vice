@@ -1,0 +1,12 @@
+# Test 004: Array push, pop and length
+fn main() {
+    mut arr = [10, 20, 30];
+    arr = array.push(arr, 40);
+    mut l = array.len(arr);
+    mut last = array.last(arr);
+    if l == 4 and last == 40 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

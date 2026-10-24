@@ -1,0 +1,82 @@
+# Heavy Test 055: Entity Component System Architecture 55
+data Entity55 {
+    id: int,
+    active: bool,
+    pos_x: float,
+    pos_y: float,
+    vel_x: float,
+    vel_y: float,
+    hp: int
+}
+
+data WorldEcs55 {
+    entities: array,
+    next_id: int
+}
+
+fn ecs_new() -> WorldEcs55 {
+    return WorldEcs55([], 1);
+}
+
+fn ecs_spawn(world: WorldEcs55, px: float, py: float, vx: float, vy: float, hp: int) -> WorldEcs55 {
+    mut eid = world.next_id;
+    mut ent = Entity55(eid, true, px, py, vx, vy, hp);
+    mut entities = array.push(world.entities, ent);
+    return WorldEcs55(entities, eid + 1);
+}
+
+fn ecs_movement_system(world: WorldEcs55, dt: float) -> WorldEcs55 {
+    mut new_ents = [];
+    mut idx = 0;
+    while idx < array.len(world.entities) {
+        mut ent = world.entities[idx];
+        if ent.active {
+            ent.pos_x = ent.pos_x + (ent.vel_x * dt);
+            ent.pos_y = ent.pos_y + (ent.vel_y * dt);
+        }
+        new_ents = array.push(new_ents, ent);
+        idx = idx + 1;
+    }
+    return WorldEcs55(new_ents, world.next_id);
+}
+
+fn ecs_damage_system(world: WorldEcs55, damage_amount: int) -> WorldEcs55 {
+    mut new_ents = [];
+    mut idx = 0;
+    while idx < array.len(world.entities) {
+        mut ent = world.entities[idx];
+        if ent.active {
+            ent.hp = ent.hp - damage_amount;
+            if ent.hp <= 0 {
+                ent.active = false;
+            }
+        }
+        new_ents = array.push(new_ents, ent);
+        idx = idx + 1;
+    }
+    return WorldEcs55(new_ents, world.next_id);
+}
+
+fn main() {
+    mut world = ecs_new();
+    world = ecs_spawn(world, 0.0, 0.0, 10.0, 5.0, 100);
+    world = ecs_spawn(world, 100.0, 50.0, -5.0, -2.0, 20);
+    
+    # 2 simulation frames of movement dt=0.5
+    world = ecs_movement_system(world, 0.5);
+    world = ecs_movement_system(world, 0.5);
+    
+    # Apply damage
+    world = ecs_damage_system(world, 30);
+    
+    mut e1 = world.entities[0];
+    mut e2 = world.entities[1];
+    
+    # E1 moved 10*1.0 = 10.0 in X, alive with 70 hp
+    # E2 died (20 - 30 <= 0), active = false
+    if e1.active and e1.pos_x > 9.9 and e1.hp == 70 and !e2.active {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

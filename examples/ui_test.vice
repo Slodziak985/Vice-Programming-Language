@@ -1,0 +1,5 @@
+@autocheck
+@entry
+fn main() {
+    
+}

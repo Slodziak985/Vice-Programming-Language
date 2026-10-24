@@ -1,0 +1,27 @@
+@lowlevel
+data SensorReading {
+    id: int => 10.8;
+    value: float => 22;
+    samples: int[] => [1, 2, 3];
+}
+
+@highlevel
+fn average(total: int, count: int) -> float {
+    return total / count;
+}
+
+@lowlevel
+fn clamp_to_int(value: float) -> int {
+    return value;
+}
+
+@entry
+fn main() {
+    mut reading: SensorReading => SensorReading(value => 42.75);
+    reading.id = 33.9;
+    reading.samples.push(4);
+
+    output <- "reading", reading.id, reading.value, len(reading.samples);
+    output <- "average", average(5, 2);
+    output <- "clamped", clamp_to_int(reading.value);
+}

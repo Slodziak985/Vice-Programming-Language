@@ -1,0 +1,13 @@
+# Test 046: Matrix operations 46
+fn main() {
+    mut m1 = matrix.zeros(2, 2);
+    mut arr_data = [46.0, 0.0, 0.0, 46.0];
+    mut m2 = matrix.from_array(arr_data, 2, 2);
+    mut shape = matrix.shape(m2);
+    mut sum_val = matrix.sum(m2);
+    if shape[0] == 2 and shape[1] == 2 and sum_val > 91.0 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

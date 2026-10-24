@@ -1,0 +1,74 @@
+use "game.vice";
+
+data PhysicsBody {
+    pos: GameVec2 => GameVec2();
+    size: GameVec2 => GameVec2();
+    velocity: GameVec2 => GameVec2();
+    grounded: bool => false;
+}
+
+data PhysicsWorld {
+    gravity: float => 1400.0;
+    max_fall_speed: float => 900.0;
+}
+
+fn physics_body_rect(body: PhysicsBody) -> GameRect {
+    return game_rect(body.pos.x, body.pos.y, body.size.x, body.size.y);
+}
+
+fn physics_body(pos: GameVec2, size: GameVec2) -> PhysicsBody {
+    mut body => PhysicsBody();
+    body.pos = pos;
+    body.size = size;
+    body.velocity = game_vec2(0.0, 0.0);
+    body.grounded = false;
+    return body;
+}
+
+fn physics_body_step(mut body: PhysicsBody, world: PhysicsWorld, dt: float) -> PhysicsBody {
+    body.velocity.y += world.gravity * dt;
+    if (body.velocity.y > world.max_fall_speed) {
+        body.velocity.y = world.max_fall_speed;
+    }
+    body.pos.x += body.velocity.x * dt;
+    body.pos.y += body.velocity.y * dt;
+    body.grounded = false;
+    return body;
+}
+
+fn physics_resolve_floor(mut body: PhysicsBody, floor_y: float) -> PhysicsBody {
+    let bottom => body.pos.y + body.size.y;
+    if (bottom >= floor_y) {
+        body.pos.y = floor_y - body.size.y;
+        if (body.velocity.y > 0.0) {
+            body.velocity.y = 0.0;
+        }
+        body.grounded = true;
+    }
+    return body;
+}
+
+fn physics_resolve_platform(mut body: PhysicsBody, platform: GameRect, previous_y: float) -> PhysicsBody {
+    let body_rect => physics_body_rect(body);
+    if (!game_rects_overlap(body_rect, platform)) {
+        return body;
+    }
+
+    let previous_bottom => previous_y + body.size.y;
+    if (previous_bottom <= platform.y && body.velocity.y >= 0.0) {
+        body.pos.y = platform.y - body.size.y;
+        body.velocity.y = 0.0;
+        body.grounded = true;
+    }
+    return body;
+}
+
+fn physics_resolve_platforms(mut body: PhysicsBody, platforms: GameRect[], previous_y: float) -> PhysicsBody {
+    if (len(platforms) == 0) {
+        return body;
+    }
+    for i in 0..(len(platforms) - 1) {
+        body = physics_resolve_platform(body, platforms[i], previous_y);
+    }
+    return body;
+}

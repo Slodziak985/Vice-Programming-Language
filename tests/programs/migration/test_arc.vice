@@ -1,0 +1,14 @@
+fn main() {
+    let mut my_array => [1, 2, 3];
+    let shared_array => &my_array;
+    
+    shared_array.push(4);
+    
+    output <- "My array po dodaniu przez referencje:";
+    output <- my_array;
+    
+    *shared_array = [9, 9, 9];
+    
+    output <- "My array po deref-assign:";
+    output <- my_array;
+}

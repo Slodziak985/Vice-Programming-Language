@@ -1,0 +1,62 @@
+# Heavy Test 037: Gaussian Elimination 3x3 Solver 37
+fn solve_linear_3x3(A: Matrix, b_vec: array) -> array {
+    # A is 3x3 matrix, b is 3x1 vector
+    mut m = matrix.to_array(A);
+    mut a00 = m[0]; mut a01 = m[1]; mut a02 = m[2]; mut b0 = b_vec[0];
+    mut a10 = m[3]; mut a11 = m[4]; mut a12 = m[5]; mut b1 = b_vec[1];
+    mut a20 = m[6]; mut a21 = m[7]; mut a22 = m[8]; mut b2 = b_vec[2];
+    
+    # Forward elimination step 1: eliminate a10 and a20 using row 0
+    mut f1 = a10 / a00;
+    a11 = a11 - (f1 * a01);
+    a12 = a12 - (f1 * a02);
+    b1 = b1 - (f1 * b0);
+    
+    mut f2 = a20 / a00;
+    a21 = a21 - (f2 * a01);
+    a22 = a22 - (f2 * a02);
+    b2 = b2 - (f2 * b0);
+    
+    # Forward elimination step 2: eliminate a21 using row 1
+    mut f3 = a21 / a11;
+    a22 = a22 - (f3 * a12);
+    b2 = b2 - (f3 * b1);
+    
+    # Back-substitution
+    mut x2 = b2 / a22;
+    mut x1 = (b1 - (a12 * x2)) / a11;
+    mut x0 = (b0 - (a01 * x1) - (a02 * x2)) / a00;
+    
+    return [x0, x1, x2];
+}
+
+fn main() {
+    # System of equations:
+    # 2*x + 1*y - 1*z = 8
+    # -3*x - 1*y + 2*z = -11
+    # -2*x + 1*y + 2*z = -3
+    # Exact solution: x=2, y=3, z=-1
+    mut A_data = [
+        2.0, 1.0, -1.0,
+        -3.0, -1.0, 2.0,
+        -2.0, 1.0, 2.0
+    ];
+    mut A = matrix.from_array(A_data, 3, 3);
+    mut b = [8.0, -11.0, -3.0];
+    
+    mut sol = solve_linear_3x3(A, b);
+    
+    mut x = sol[0];
+    mut y = sol[1];
+    mut z = sol[2];
+    
+    mut ok_x = x > 1.99 and x < 2.01;
+    mut ok_y = y > 2.99 and y < 3.01;
+    mut ok_z = z > -1.01 and z < -0.99;
+    
+    if ok_x and ok_y and ok_z {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

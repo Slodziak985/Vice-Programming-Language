@@ -1,0 +1,40 @@
+// --- KONFIGURACJA UI ---
+@read -> @intent("APP_THEME")
+data theme {
+    window_title : string => "Vice Dashboard v1.0";
+    bg_color     : string => "#1a1a1a";
+    accent       : string => "#00ff88";
+}
+
+// --- LOGIKA APLIKACJI ---
+@entry -> @intent("UI_ROOT")
+@rules("Nie blokuj głównego wątku renderowania")
+fn main() {
+    
+    // Inicjalizacja okna (używamy parametrów nazwanych dla czytelności AI)
+    mut win : Window => ui.window(
+        title => theme.window_title,
+        size  => [400, 300],
+        color => theme.bg_color
+    );
+
+    mut count : int => 0;
+
+    // Główna pętla zdarzeń (Event Loop)
+    while (ui.frame(win)) {
+        
+        // Renderowanie tekstu
+        ui.text(
+            text => "Wartość licznika: " + count,
+            pos  => [50, 50]
+        );
+
+        // Tworzymy przycisk i od razu sprawdzamy jego stan (:)
+        mut btn_add : UiResponse => ui.button(id => "counter.add", text => "Dodaj +1", pos => [50, 100]);
+
+        if (btn_add.clicked) {
+            count += 1;
+            output <- "Zwiększono licznik do: ", count;
+        }
+    }
+}

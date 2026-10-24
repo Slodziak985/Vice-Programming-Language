@@ -1,0 +1,16 @@
+# Test 008: Recursive factorial function
+fn factorial(n: int) -> int {
+    if n <= 1 {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+fn main() {
+    mut fact6 = factorial(6);
+    if fact6 == 720 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,14 @@
+# Test 006: For-in loop over array
+fn main() {
+    mut items = [2, 4, 6, 8, 10];
+    mut product = 1;
+    for item in items {
+        product = product * item;
+    }
+    # 2*4*6*8*10 = 3840
+    if product == 3840 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

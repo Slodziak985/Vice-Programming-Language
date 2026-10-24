@@ -1,0 +1,20 @@
+@autocheck
+# Foundation 1.0.0 Test Suite
+
+@entry
+fn main() {
+    # 1. Test Structs (data)
+    data AppConfig {
+        version : string => "1.0.0";
+        port    : int    => 8080;
+        debug   : bool   => true;
+    }
+
+    # 2. Test Multi-Value Output
+    mut user => "Senior Dev";
+    mut status => "Initializing";
+    
+    output <- "System:", status, "| User:", user;
+
+    output <- "Foundations 1.0.0 verified.";
+}

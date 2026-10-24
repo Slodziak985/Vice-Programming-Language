@@ -1,0 +1,46 @@
+# Medium Test 083: Sieve of Eratosthenes 83
+fn count_primes(limit: int) -> int {
+    mut is_prime = [];
+    mut k = 0;
+    while k <= limit {
+        is_prime = array.push(is_prime, true);
+        k = k + 1;
+    }
+    is_prime[0] = false;
+    is_prime[1] = false;
+    
+    mut p = 2;
+    while p * p <= limit {
+        if is_prime[p] {
+            mut multiple = p * p;
+            while multiple <= limit {
+                is_prime[multiple] = false;
+                multiple = multiple + p;
+            }
+        }
+        p = p + 1;
+    }
+    
+    mut count = 0;
+    mut idx = 0;
+    while idx <= limit {
+        if is_prime[idx] {
+            count = count + 1;
+        }
+        idx = idx + 1;
+    }
+    return count;
+}
+
+fn main() {
+    # Number of primes under 100 is exactly 25
+    mut p_100 = count_primes(100);
+    # Number of primes under 50 is exactly 15
+    mut p_50 = count_primes(50);
+    
+    if p_100 == 25 and p_50 == 15 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

@@ -1,0 +1,190 @@
+{
+  "Function Definition": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}(${2:params}) -> ${3:return_type} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Definiuje nową funkcję w Vice"
+  },
+  "While Loop": {
+    "prefix": ["wh", "while"],
+    "body": [
+      "while (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Pętla while"
+  },
+  "For In Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:collection} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Pętla for-in"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Instrukcja warunkowa if"
+  },
+  "If Else Statement": {
+    "prefix": ["ife", "ifelse"],
+    "body": [
+      "if (${1:condition}) {",
+      "\t$2",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Instrukcja warunkowa if-else"
+  },
+  "Data Structure": {
+    "prefix": "data",
+    "body": [
+      "data ${1:Name} {",
+      "\t${2:field}: ${3:type} => ${4:default_value};",
+      "\t$0",
+      "}"
+    ],
+    "description": "Definicja struktury danych"
+  },
+  "Enum Definition": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "\t${2:Variant1},",
+      "\t${3:Variant2}",
+      "}"
+    ],
+    "description": "Definicja wyliczenia (enum)"
+  },
+  "Trait Definition": {
+    "prefix": "trait",
+    "body": [
+      "trait ${1:Name} {",
+      "\tfn ${2:method_name}(${3:params}) -> ${4:return_type};",
+      "\t$0",
+      "}"
+    ],
+    "description": "Definicja interfejsu (trait)"
+  },
+  "Impl Block": {
+    "prefix": "impl",
+    "body": [
+      "impl ${1:TraitName} for ${2:DataType} {",
+      "\tfn ${3:method_name}(${4:params}) -> ${5:return_type} {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Implementacja trait'a dla struktury"
+  },
+  "Let Assignment": {
+    "prefix": "let",
+    "body": [
+      "let ${1:variable_name}: ${2:type} => ${3:value};"
+    ],
+    "description": "Deklaracja zmiennej"
+  },
+  "Entry Point": {
+    "prefix": ["main", "entry"],
+    "body": [
+      "@entry",
+      "fn main() {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Główny punkt wejścia aplikacji"
+  },
+  "Test Function": {
+    "prefix": ["test", "vtest"],
+    "body": [
+      "@test",
+      "fn ${1:behavior_name}() {",
+      "\tif (${2:actual} != ${3:expected}) {",
+      "\t\tfail <- \"${4:expectation failed}\";",
+      "\t}",
+      "\t$0",
+      "}"
+    ],
+    "description": "Test wykonywany przez vice test"
+  },
+  "Program Arguments": {
+    "prefix": ["args", "processargs"],
+    "body": [
+      "let ${1:args}: string[] => process.args();"
+    ],
+    "description": "Argumenty przekazane po separatorze --"
+  },
+  "Print Output": {
+    "prefix": ["emit", "out"],
+    "body": [
+      "emit <- ${1:\"message\"};"
+    ],
+    "description": "Wypisanie na wyjście"
+  },
+  "Match Statement": {
+    "prefix": "match",
+    "body": [
+      "match ${1:expression} {",
+      "\t${2:pattern} => {",
+      "\t\t$3",
+      "\t}",
+      "\t_ => {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Instrukcja match"
+  },
+  "Return Statement": {
+    "prefix": "ret",
+    "body": [
+      "return ${1:value};"
+    ],
+    "description": "Zwrócenie wartości z funkcji"
+  },
+  "Result Type Ok": {
+    "prefix": "rok",
+    "body": [
+      "let ${1:res}: Result<${2:int}, ${3:Error}> => result.ok(${4:value});"
+    ],
+    "description": "Przypisanie poprawnego wyniku Result"
+  },
+  "Result Type Err": {
+    "prefix": "rerr",
+    "body": [
+      "let ${1:res}: Result<${2:int}, ${3:Error}> => result.err(${4:\"error message\"}, ${5:1});"
+    ],
+    "description": "Przypisanie błędnego wyniku Result"
+  },
+  "Option Type Some": {
+    "prefix": "osome",
+    "body": [
+      "let ${1:opt}: Option<${2:int}> => option.some(${3:value});"
+    ],
+    "description": "Przypisanie wartości Some (Option)"
+  },
+  "Option Type None": {
+    "prefix": "onone",
+    "body": [
+      "let ${1:opt}: Option<${2:int}> => option.none();"
+    ],
+    "description": "Przypisanie wartości None (Option)"
+  },
+  "Use Import": {
+    "prefix": "use",
+    "body": [
+      "use \"${1:path/to/file.vice}\";"
+    ],
+    "description": "Import lokalnego pliku Vice"
+  }
+}

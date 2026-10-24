@@ -1,0 +1,70 @@
+# Heavy Test 062: Dense Neural Network Forward Pass & Loss 62
+fn sigmoid(x: float) -> float {
+    return 1.0 / (1.0 + math.pow(2.718281828459, -x));
+}
+
+fn relu(x: float) -> float {
+    if x > 0.0 {
+        return x;
+    }
+    return 0.0;
+}
+
+data NeuralDenseLayer62 {
+    weights: Matrix,
+    biases: array,
+    input_size: int,
+    output_size: int
+}
+
+fn layer_new(w_data: array, in_s: int, out_s: int) -> NeuralDenseLayer62 {
+    mut w_mat = matrix.from_array(w_data, out_s, in_s);
+    mut b = [0.1, -0.05];
+    return NeuralDenseLayer62(w_mat, b, in_s, out_s);
+}
+
+fn layer_forward(layer: NeuralDenseLayer62, input_vec: array) -> array {
+    mut x_mat = matrix.from_array(input_vec, layer.input_size, 1);
+    mut y_mat = matrix.mul(layer.weights, x_mat);
+    mut y_raw = matrix.to_array(y_mat);
+    
+    mut activations = [];
+    mut idx = 0;
+    while idx < layer.output_size {
+        mut val = y_raw[idx] + layer.biases[idx];
+        activations = array.push(activations, relu(val));
+        idx = idx + 1;
+    }
+    return activations;
+}
+
+fn calculate_mse(predicted: array, target: array) -> float {
+    mut sum_err = 0.0;
+    mut idx = 0;
+    while idx < array.len(predicted) {
+        mut diff = predicted[idx] - target[idx];
+        sum_err = sum_err + (diff * diff);
+        idx = idx + 1;
+    }
+    return sum_err / 2.0;
+}
+
+fn main() {
+    # 2 output neurons, 3 inputs
+    mut w_data = [
+        0.5, 0.2, -0.1,
+        -0.3, 0.8, 0.4
+    ];
+    mut layer = layer_new(w_data, 3, 2);
+    mut input_x = [1.0, 3.0, 0.5];
+    mut target_y = [1.0, 0.5];
+    
+    mut output_y = layer_forward(layer, input_x);
+    mut loss = calculate_mse(output_y, target_y);
+    
+    if array.len(output_y) == 2 and loss >= 0.0 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

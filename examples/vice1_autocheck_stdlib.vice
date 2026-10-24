@@ -1,0 +1,19 @@
+@autocheck
+fn summarize(label: string, values: int[]) -> string {
+    let size => len(values);
+    let joined => array.join([label, to_str(size), to_str(math.max(values[0], values[2]))], ":");
+    return string.upper(joined);
+}
+
+@entry
+@autocheck
+fn main() {
+    let raw => "  vice core  ";
+    let clean => string.trim(raw);
+    let words => string.split(clean, " ");
+    let numbers => [4, 8, 15];
+
+    output <- summarize(array.join(words, "-"), numbers);
+    output <- string.contains(clean, "core"), path.basename(path.join("examples", "vice1_autocheck_stdlib.vice"));
+    output <- math.floor(9.8), math.ceil(9.1), math.round(9.5), time.now_ms() > 0;
+}

@@ -1,0 +1,14 @@
+# Test 094: Frequency counting in map 94
+fn main() {
+    mut m = {};
+    m = map.set(m, "count_94", 940);
+    m = map.set(m, "multiplier", 3);
+    mut count = map.get(m, "count_94", 0);
+    mut mult = map.get(m, "multiplier", 1);
+    mut res = count * mult;
+    if res == 2820 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

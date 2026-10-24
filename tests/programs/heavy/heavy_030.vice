@@ -1,0 +1,43 @@
+# Heavy Test 030: Multi-Paradigm Enterprise System 30
+# Combines SQLite persistence, Matrix similarity, Crypto hashing, and Regex validation
+
+data TransactionRecord30 {
+    tx_id: string,
+    user: string,
+    amount: float,
+    verified: bool
+}
+
+fn validate_coupon_code(code: string) -> bool {
+    return regex.is_match("^VICE-[A-Z]{3}-\\d{4}$", code);
+}
+
+fn main() {
+    # 1. SQLite Database Storage
+    mut db = sqlite.open(":memory:");
+    sqlite.execute(db, "CREATE TABLE ledger (id TEXT PRIMARY KEY, amount REAL, sig TEXT);", []);
+    
+    # 2. Crypto Transaction Signing
+    mut tx_id = "TX_10_" + string.from_int(time.now_ms());
+    mut raw_signature = crypto.sha256(tx_id + ":amount=1000.0");
+    
+    sqlite.execute(db, "INSERT INTO ledger VALUES (?, ?, ?);", [tx_id, "1000.0", raw_signature]);
+    mut rows = sqlite.query(db, "SELECT * FROM ledger WHERE id = ?;", [tx_id]);
+    sqlite.close(db);
+    
+    # 3. Matrix Cosine Similarity Vector
+    mut v1 = [1.0, 2.0, 3.0];
+    mut v2 = [1.0, 2.0, 3.0];
+    mut dot = matrix.dot(v1, v2);
+    
+    # 4. Regex coupon verification
+    mut coupon = "VICE-ABC-1234";
+    mut valid_coupon = validate_coupon_code(coupon);
+    mut invalid_coupon = validate_coupon_code("VICE-INVALID");
+    
+    if array.len(rows) == 1 and dot > 13.99 and dot < 14.01 and valid_coupon and !invalid_coupon {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

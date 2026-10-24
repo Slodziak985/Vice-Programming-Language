@@ -1,0 +1,38 @@
+enum Status {
+    Ok,
+    Error,
+    Pending
+}
+
+fn enum_test() -> bool {
+    let s => Status.Ok;
+    
+    let mut num => 0;
+    
+    match s {
+        Status.Ok => { num = 1; }
+        Status.Error => { num = 2; }
+        Status.Pending => { num = 3; }
+    }
+    
+    if (num != 1) {
+        return false;
+    }
+    
+    let s2 => Status.Error;
+    if (s2 == Status.Pending) {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 6 (Enums)...";
+    let res => enum_test();
+    if (res) {
+        output <- "Test 6 Passed!";
+    } else {
+        error() <- "Test 6 Failed!";
+    }
+}

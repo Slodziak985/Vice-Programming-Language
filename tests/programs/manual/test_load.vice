@@ -1,0 +1,15 @@
+data Player {
+    x: int => 0;
+    y: int => 0;
+}
+data Level {
+    name: string => "";
+    entities: Player[] => [];
+}
+
+@entry
+fn main() {
+    let lvl => engine.load_scene("tests/programs/manual/test_scene.vscn");
+    output <- "Loaded Level: " + lvl.name;
+    output <- "Player x: " + to_str(lvl.entities[0].x);
+}

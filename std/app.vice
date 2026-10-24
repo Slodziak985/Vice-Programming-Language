@@ -1,0 +1,59 @@
+data AppConfig {
+    title: string => "Vice App";
+    width: int => 900;
+    height: int => 600;
+    color: string => "#080c0e";
+}
+
+data AppPanel {
+    id: string => "panel.main";
+    title: string => "";
+    x: int => 20;
+    y: int => 20;
+    width: int => 320;
+    height: int => 240;
+}
+
+fn app_default_config(title: string) -> AppConfig {
+    mut config => AppConfig();
+    config.title = title;
+    config.width = 900;
+    config.height = 600;
+    config.color = "#080c0e";
+    return config;
+}
+
+fn app_open(config: AppConfig) -> Window {
+    return ui.window(
+        title => config.title,
+        size => [config.width, config.height],
+        color => config.color
+    );
+}
+
+fn app_panel(panel: AppPanel) -> bool {
+    return ui.panel(
+        id => panel.id,
+        title => panel.title,
+        pos => [panel.x, panel.y],
+        size => [panel.width, panel.height]
+    );
+}
+
+fn app_end_panel() -> bool {
+    return ui.end_panel();
+}
+
+fn app_label(text: string, x: int, y: int) -> bool {
+    return ui.text(text => text, pos => [x, y]);
+}
+
+fn app_primary_button(id: string, text: string, x: int, y: int, width: int) -> UiResponse {
+    return ui.button(
+        id => id,
+        text => text,
+        pos => [x, y],
+        size => [width, 36],
+        color => "#b7f34a"
+    );
+}

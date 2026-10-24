@@ -1,0 +1,24 @@
+fn factorial(n: int) -> int {
+    if (n <= 1) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+fn function_test() -> bool {
+    if (factorial(5) != 120) {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 4 (Functions)...";
+    let res => function_test();
+    if (res) {
+        output <- "Test 4 Passed!";
+    } else {
+        error() <- "Test 4 Failed!";
+    }
+}

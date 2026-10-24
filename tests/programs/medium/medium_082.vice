@@ -1,0 +1,85 @@
+# Medium Test 082: Binary Search Tree Operations 82
+data Node82 {
+    value: int,
+    left: int,
+    right: int
+}
+
+data BstTree82 {
+    values: array,
+    lefts: array,
+    rights: array,
+    count: int
+}
+
+fn tree_new() -> BstTree82 {
+    return BstTree82([], [], [], 0);
+}
+
+fn tree_insert(tree: BstTree82, val: int) -> int {
+    mut idx = tree.count;
+    tree.values = array.push(tree.values, val);
+    tree.lefts = array.push(tree.lefts, -1);
+    tree.rights = array.push(tree.rights, -1);
+    tree.count = tree.count + 1;
+    
+    if idx == 0 {
+        return 0;
+    }
+    
+    mut cur = 0;
+    while true {
+        if val < tree.values[cur] {
+            if tree.lefts[cur] == -1 {
+                tree.lefts[cur] = idx;
+                return idx;
+            }
+            cur = tree.lefts[cur];
+        } else {
+            if tree.rights[cur] == -1 {
+                tree.rights[cur] = idx;
+                return idx;
+            }
+            cur = tree.rights[cur];
+        }
+    }
+    return idx;
+}
+
+fn tree_contains(tree: BstTree82, target: int) -> bool {
+    if tree.count == 0 {
+        return false;
+    }
+    mut cur = 0;
+    while cur != -1 {
+        if tree.values[cur] == target {
+            return true;
+        }
+        if target < tree.values[cur] {
+            cur = tree.lefts[cur];
+        } else {
+            cur = tree.rights[cur];
+        }
+    }
+    return false;
+}
+
+fn main() {
+    mut bst = tree_new();
+    tree_insert(bst, 50 + 82);
+    tree_insert(bst, 25 + 82);
+    tree_insert(bst, 75 + 82);
+    tree_insert(bst, 10 + 82);
+    tree_insert(bst, 30 + 82);
+    
+    mut has_root = tree_contains(bst, 50 + 82);
+    mut has_left = tree_contains(bst, 10 + 82);
+    mut has_right = tree_contains(bst, 75 + 82);
+    mut has_missing = tree_contains(bst, 9999);
+    
+    if has_root and has_left and has_right and !has_missing {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

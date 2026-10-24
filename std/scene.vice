@@ -1,0 +1,22 @@
+fn scene_empty(name: string) {
+    let source => "{\"version\":1,\"kind\":\"scene\",\"name\":\"" + name + "\",\"entities\":[],\"layers\":[],\"settings\":{\"width\":1280,\"height\":720,\"background\":\"#101820\"}}";
+    return json.parse(source);
+}
+
+fn scene_load(path: string) {
+    return fs.read_json(path);
+}
+
+fn scene_save(path: string, scene) -> bool {
+    return fs.write_json(path, scene);
+}
+
+fn scene_entity(id: string, name: string, kind: string, x: int, y: int) {
+    let source => "{\"id\":\"" + id + "\",\"name\":\"" + name + "\",\"kind\":\"" + kind + "\",\"transform\":{\"x\":" + to_str(x) + ",\"y\":" + to_str(y) + ",\"rotation\":0,\"scale_x\":1,\"scale_y\":1},\"components\":[]}";
+    return json.parse(source);
+}
+
+fn scene_camera(id: string, x: int, y: int, width: int, height: int) {
+    let source => "{\"id\":\"" + id + "\",\"name\":\"Camera\",\"kind\":\"camera\",\"transform\":{\"x\":" + to_str(x) + ",\"y\":" + to_str(y) + ",\"rotation\":0,\"scale_x\":1,\"scale_y\":1},\"camera\":{\"width\":" + to_str(width) + ",\"height\":" + to_str(height) + "},\"components\":[]}";
+    return json.parse(source);
+}

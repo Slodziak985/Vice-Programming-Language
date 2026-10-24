@@ -1,0 +1,32 @@
+# Build outputs
+/target/
+/dist/
+*.pdb
+*.exe
+*.log
+*.vsix
+
+# Package temporary directories
+/Vice.AppDir/
+/ViceInstaller.AppDir/
+/ViceInstaller_Windows/
+/appimagetool-*.AppImage
+/ViceInstaller-*.AppImage
+/ViceInstaller-*.zip
+/Web/downloads/*.zip
+/.git-corrupt-*/
+
+# Media & large binaries
+/Videos/
+*.mp4
+
+# Web dependencies & cache
+/Web/node_modules/
+/Web/.firebase/
+/Web/*.log
+
+# IDE & OS files
+/.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

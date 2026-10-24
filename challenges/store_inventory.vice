@@ -1,0 +1,32 @@
+data Produkt {
+    nazwa: string => "Produkt";
+    cena: int => 0;
+}
+
+@entry
+fn main() {
+    # Inicjalizacja listy
+    mut magazyn => [];
+
+    # Tworzenie pierwszego produktu
+    let p1 => Produkt();
+    p1.nazwa = "Kawa";
+    p1.cena = 25;
+
+    # Tworzenie drugiego produktu
+    let p2 => Produkt();
+    p2.nazwa = "Zapałki";
+    p2.cena = 2;
+
+    # Dodawanie do magazynu
+    magazyn.push(p1);
+    magazyn.push(p2);
+
+    output <- "Produkty premium (powyżej 10 zł):";
+    
+    for p in magazyn {
+        if (p.cena > 10) {
+            output <- p.nazwa;
+        }
+    }
+}

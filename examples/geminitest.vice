@@ -1,0 +1,12 @@
+@autocheck
+@entry
+fn main() {
+    let names: string[] => ["Vice", "Rust", "Gemini"];
+    output <- "--- Test iteracji ---";
+    for name in names {
+        let greeting => "Witaj, " + name + "!";
+        output <- greeting;
+    }
+    let total => len(names);
+    output <- "Suma elementów: " + to_str(total);
+}

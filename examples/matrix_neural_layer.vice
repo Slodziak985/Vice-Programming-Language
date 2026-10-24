@@ -1,0 +1,37 @@
+# Matrix Neural Layer Forward Pass in Vice 0.2
+# Demonstrates NumPy-style matrix operations for AI and computation
+
+fn main() {
+    output <- "--- Vice Neural Layer Simulation ---";
+
+    # Wagi warstwy (2 neurony, 3 wejscia): macierz 2x3
+    # Neuron 1: [0.5, -0.2, 0.8]
+    # Neuron 2: [0.1, 0.9, -0.4]
+    mut weights_data = [0.5, -0.2, 0.8, 0.1, 0.9, -0.4];
+    mut W = matrix.from_array(weights_data, 2, 3);
+    output <- "Wymiary wag (W):";
+    output <- matrix.shape(W);
+
+    # Wejscie (3 cechy wejsciowe): macierz 3x1 (wektor kolumnowy)
+    mut inputs_data = [1.0, 2.0, 0.5];
+    mut X = matrix.from_array(inputs_data, 3, 1);
+    output <- "Wymiary wejscia (X):";
+    output <- matrix.shape(X);
+
+    # Mnozenie macierzowe: Y = W * X (wynik 2x1)
+    mut Y = matrix.mul(W, X);
+    output <- "Wyjscie neuronow przed biaskiem (Y = W * X):";
+    output <- matrix.to_array(Y);
+
+    # Transpozycja wag (W^T) o wymiarach 3x2
+    mut W_T = matrix.transpose(W);
+    output <- "Wymiary wag po transpozycji (W^T):";
+    output <- matrix.shape(W_T);
+
+    # Obliczenie sumy wszystkich elementow macierzy
+    mut total_sum = matrix.sum(W);
+    output <- "Suma wszystkich wag:";
+    output <- total_sum;
+
+    output <- "Warstwa neuronowa obliczona pomyslnie!";
+}

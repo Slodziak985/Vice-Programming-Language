@@ -1,0 +1,53 @@
+fn math_and_logic() -> bool {
+    let mut success => true;
+    
+    let a => 10;
+    let b => 25;
+    let c => a + b;
+    if (c != 35) {
+        success = false;
+        error() <- "Math add failed";
+    }
+    
+    let x => 10.5;
+    let y => 2.0;
+    let z => x * y;
+    if (z != 21.0) {
+        success = false;
+        error() <- "Math float mul failed";
+    }
+    
+    let mut i => 0;
+    while (i < 100) {
+        i = i + 1;
+    }
+    if (i != 100) {
+        success = false;
+        error() <- "While loop failed";
+    }
+    
+    let mut sum => 0;
+    for j in 1..10 {
+        sum = sum + j;
+    }
+    if (sum != 55) {
+        success = false;
+        error() <- "For loop failed";
+    }
+    
+    if (!success || false) {
+        return false;
+    }
+    
+    return true;
+}
+
+fn main() {
+    output <- "Running test 1 (Math & Logic)...";
+    let res => math_and_logic();
+    if (res) {
+        output <- "Test 1 Passed!";
+    } else {
+        error() <- "Test 1 Failed!";
+    }
+}

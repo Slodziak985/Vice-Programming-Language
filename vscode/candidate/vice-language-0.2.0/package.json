@@ -1,0 +1,93 @@
+{
+  "name": "vice-lang",
+  "displayName": "Vice Language Support",
+  "description": "Vice language support with diagnostics, formatting, commands, syntax highlighting, and snippets.",
+  "version": "0.2.0",
+  "publisher": "vice-devs",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Formatters"
+  ],
+  "icon": "icon.png",
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:vice",
+    "onCommand:vice.checkFile",
+    "onCommand:vice.runFile"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "vice",
+        "aliases": [
+          "Vice",
+          "vice"
+        ],
+        "extensions": [
+          ".vice"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icon.svg",
+          "dark": "./icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "vice",
+        "scopeName": "source.vice",
+        "path": "./syntaxes/vice.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "vice",
+        "path": "./snippets/snippets.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vice.checkFile",
+        "title": "Vice: Check current file"
+      },
+      {
+        "command": "vice.runFile",
+        "title": "Vice: Run current file"
+      }
+    ],
+    "configuration": {
+      "title": "Vice",
+      "properties": {
+        "vice.executablePath": {
+          "type": "string",
+          "default": "vice",
+          "description": "Path or command used to start the Vice CLI."
+        },
+        "vice.checkOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run the complete Vice check pipeline whenever a Vice file is saved."
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "vice.checkFile",
+          "when": "editorLangId == vice",
+          "group": "navigation@20"
+        },
+        {
+          "command": "vice.runFile",
+          "when": "editorLangId == vice",
+          "group": "navigation@21"
+        }
+      ]
+    }
+  }
+}

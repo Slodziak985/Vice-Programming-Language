@@ -1,0 +1,13 @@
+# Test 039: SQLite in-memory execution 39
+fn main() {
+    mut db = sqlite.open(":memory:");
+    sqlite.execute(db, "CREATE TABLE t (val INT);", []);
+    sqlite.execute(db, "INSERT INTO t VALUES (?);", [273]);
+    mut rows = sqlite.query(db, "SELECT val FROM t;", []);
+    sqlite.close(db);
+    if array.len(rows) == 1 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

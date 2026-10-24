@@ -1,0 +1,12 @@
+# Test 002: Floating point computation
+fn main() {
+    mut x = 12.5;
+    mut y = 2.5;
+    mut res = (x / y) + 5.0;
+    # 5.0 + 5.0 = 10.0
+    if res > 9.99 and res < 10.01 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

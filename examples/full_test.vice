@@ -1,0 +1,105 @@
+# ──────────────────────────────────────────────────
+# Traits
+# ──────────────────────────────────────────────────
+trait Entity {
+    fn update(self);
+    fn is_alive(self) -> bool;
+}
+
+# ──────────────────────────────────────────────────
+# Health Bar (concrete type - generics with defaults have limitations)
+# ──────────────────────────────────────────────────
+data HealthBar {
+    current: int => 0;
+    maximum: int => 100;
+}
+
+impl HealthBar {
+    fn percentage(self) -> string {
+        return "${self.current}/${self.maximum}";
+    }
+}
+
+# ──────────────────────────────────────────────────
+# Enums
+# ──────────────────────────────────────────────────
+enum DamageType {
+    Physical,
+    Magical,
+    True
+}
+
+# ──────────────────────────────────────────────────
+# Data Structures
+# ──────────────────────────────────────────────────
+data Warrior {
+    name: string => "Unknown";
+    hp: int => 100;
+    armor: int => 10;
+    attack: int => 15;
+}
+
+impl Warrior {
+    fn take_damage(mut self, dmg: int, dtype: int) -> Result {
+        if (self.hp <= 0) {
+            return Result(error => "${self.name} is already dead", is_ok => false);
+        }
+
+        mut actual => dmg;
+        if (dtype == 0) {
+            actual = dmg - self.armor;
+            if (actual < 1) { actual = 1; }
+        }
+
+        self.hp -= actual;
+        output <- "${self.name} takes ${actual} damage! HP: ${self.hp}";
+        return Result(value => actual, is_ok => true);
+    }
+}
+
+impl Entity for Warrior {
+    fn update(self) {
+        output <- "[${self.name}] HP: ${self.hp} | ATK: ${self.attack} | ARM: ${self.armor}";
+    }
+    fn is_alive(self) -> bool {
+        return self.hp > 0;
+    }
+}
+
+# ──────────────────────────────────────────────────
+# Helper function (replaces top-level lambda)
+# ──────────────────────────────────────────────────
+fn log_event(msg: string) {
+    output <- "⚔️  ${msg}";
+}
+
+# ──────────────────────────────────────────────────
+# Entry
+# ──────────────────────────────────────────────────
+@entry
+@autocheck
+fn main() {
+    mut hero    => Warrior(name => "Arthur", hp => 120, armor => 20, attack => 30);
+    mut monster => Warrior(name => "Dragon", hp => 200, armor => 5,  attack => 45);
+
+    log_event("Combat begins!");
+
+    hero.update();
+    monster.update();
+
+    # Round 1 — Physical attack from hero
+    let r1 => monster.take_damage(hero.attack, 0)!;
+
+    # Round 2 — True damage from dragon
+    let r2 => hero.take_damage(monster.attack, 2)!;
+
+    # Check who is still standing
+    match hero.is_alive() {
+        true  => { output <- "Hero survives with", hero.hp, "HP!"; }
+        false => { output <- "Hero has fallen..."; }
+    }
+
+    # Final status using HealthBar generic
+    let bar => HealthBar(current => hero.hp, maximum => 120);
+    output <- "Hero HP:", bar.percentage();
+}

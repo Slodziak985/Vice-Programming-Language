@@ -1,0 +1,67 @@
+# Heavy Test 008: Web API Router & Middleware Stack 8
+data HttpRequestStub8 {
+    method: string,
+    path: string,
+    headers: map,
+    body: string
+}
+
+data HttpResponseStub8 {
+    status: int,
+    body: string
+}
+
+data Router8 {
+    routes: map,
+    middleware_count: int
+}
+
+fn router_new() -> Router8 {
+    return Router8({}, 0);
+}
+
+fn router_add(router: Router8, method: string, path: string, handler_id: string) -> Router8 {
+    mut key = method + ":" + path;
+    mut routes = map.set(router.routes, key, handler_id);
+    return Router8(routes, router.middleware_count);
+}
+
+fn router_dispatch(router: Router8, req: HttpRequestStub8) -> HttpResponseStub8 {
+    # Middleware 1: Auth check
+    if !map.contains_key(req.headers, "Authorization") {
+        return HttpResponseStub8(401, "{\"error\": \"Unauthorized\"}");
+    }
+    
+    # Routing
+    mut key = req.method + ":" + req.path;
+    if map.contains_key(router.routes, key) {
+        mut h = map.get(router.routes, key, "");
+        if h == "get_user" {
+            return HttpResponseStub8(200, "{\"user\": \"Alice_8\", \"role\": \"admin\"}");
+        } else if h == "create_item" {
+            return HttpResponseStub8(201, "{\"created\": true, \"id\": 800}");
+        }
+    }
+    return HttpResponseStub8(404, "{\"error\": \"Not Found\"}");
+}
+
+fn main() {
+    mut r = router_new();
+    r = router_add(r, "GET", "/api/user", "get_user");
+    r = router_add(r, "POST", "/api/item", "create_item");
+    
+    mut req_ok = HttpRequestStub8("GET", "/api/user", {"Authorization": "Bearer secret"}, "");
+    mut res_ok = router_dispatch(r, req_ok);
+    
+    mut req_unauth = HttpRequestStub8("GET", "/api/user", {}, "");
+    mut res_unauth = router_dispatch(r, req_unauth);
+    
+    mut req_not_found = HttpRequestStub8("DELETE", "/api/unknown", {"Authorization": "Bearer secret"}, "");
+    mut res_not_found = router_dispatch(r, req_not_found);
+    
+    if res_ok.status == 200 and res_unauth.status == 401 and res_not_found.status == 404 {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

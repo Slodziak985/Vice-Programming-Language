@@ -1,0 +1,16 @@
+# Test 071: Mathematical series step 71
+fn main() {
+    mut total = 0;
+    mut k = 1;
+    while k <= 5 {
+        total = total + (k * k + 71);
+        k = k + 1;
+    }
+    # 1+4+9+16+25 = 55 + 5*71
+    mut expected = 55 + (5 * 71);
+    if total == expected {
+        output <- "PASS";
+    } else {
+        output <- "FAIL";
+    }
+}

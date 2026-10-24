@@ -1,0 +1,42 @@
+{
+    "name": "vice-language",
+    "displayName": "Vice Language Support",
+    "description": "Language support for the Vice programming language",
+    "version": "0.0.1",
+    "publisher": "twoja-nazwa",
+    "engines": {
+        "vscode": "^1.75.0"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "icon": "icon.png",
+    "contributes": {
+        "languages": [
+            {
+                "id": "vice",
+                "aliases": ["Vice", "vice"],
+                "extensions": [".vice"],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "light": "./icon.png",
+                    "dark": "./icon.png"
+                }
+            }
+        ],
+        "grammars": [
+            {
+                "language": "vice",
+                "scopeName": "source.vice",
+                "path": "./syntaxes/vice.tmLanguage.json"
+            }
+        ],
+        "snippets": [
+            {
+                "language": "vice",
+                "path": "./snippets/snippets.json"
+            }
+        ]
+    }
+}
